@@ -1,0 +1,18 @@
+# Build artifacts
+Source/zmk/app/build/
+Source/zmk/zephyr/
+Source/zmk/modules/
+Source/zmk/tools/
+
+# Podman container artifacts
+*.log
+
+# Editor temporary files
+*.swp
+*.swo
+*~
+.*.swp
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,3 @@
+[submodule "Source/zmk"]
+	path = Source/zmk
+	url = https://github.com/zmkfirmware/zmk.git
