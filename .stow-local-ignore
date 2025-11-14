@@ -1,0 +1,21 @@
+# Git files
+.git
+.gitignore
+.gitmodules
+
+# Documentation
+README.md
+docs
+
+# Source code (not for stowing)
+Source
+config
+
+# GitHub Actions
+.github
+
+# Build configuration
+build.yaml
+
+# Layout visualization
+layout.svg

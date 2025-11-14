@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+# Build ZMK firmware using Podman container
+# Usage: zmk-build <board> <shield> [left|right]
+#
+# Examples:
+#   zmk-build nice_nano_v2 chocofi left
+#   zmk-build nice_nano_v2 chocofi right
+
+set -euo pipefail
+
+# Determine script location and derive paths
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ZMK_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+ZMK_SOURCE="$ZMK_ROOT/Source/zmk"
+CONFIG_DIR="$ZMK_ROOT/config"
+
+# Parse arguments
+BOARD="${1:-}"
+SHIELD="${2:-}"
+SIDE="${3:-}"
+
+# Validate arguments
+if [ -z "$BOARD" ] || [ -z "$SHIELD" ]; then
+    echo "Usage: zmk-build <board> <shield> [left|right]"
+    echo ""
+    echo "Examples:"
+    echo "  zmk-build nice_nano_v2 chocofi left"
+    echo "  zmk-build nice_nano_v2 chocofi right"
+    exit 1
+fi
+
+# Check if ZMK source exists
+if [ ! -d "$ZMK_SOURCE" ]; then
+    echo "Error: ZMK source not found at $ZMK_SOURCE"
+    echo "Run: cd $ZMK_ROOT && git submodule update --init --recursive"
+    exit 1
+fi
+
+# Check if config directory exists
+if [ ! -d "$CONFIG_DIR" ]; then
+    echo "Error: Config directory not found at $CONFIG_DIR"
+    exit 1
+fi
+
+# Build container image if it doesn't exist
+if ! podman image exists zmk-dev; then
+    echo "Building ZMK container image..."
+    podman build -t zmk-dev \
+        -f "$ZMK_SOURCE/.devcontainer/Dockerfile" \
+        "$ZMK_SOURCE/.devcontainer"
+fi
+
+# Determine build directory and shield name
+if [ -n "$SIDE" ]; then
+    BUILD_DIR="build/$SIDE"
+    SHIELD_NAME="${SHIELD}_${SIDE}"
+else
+    BUILD_DIR="build"
+    SHIELD_NAME="$SHIELD"
+fi
+
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "Building ZMK Firmware"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "  Board:      $BOARD"
+echo "  Shield:     $SHIELD_NAME"
+echo "  Build dir:  $BUILD_DIR"
+echo "  Config:     $CONFIG_DIR"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+# Run build in container
+podman run -it --rm \
+    --security-opt label=disable \
+    --workdir /workspaces/zmk/app \
+    -v "$ZMK_SOURCE:/workspaces/zmk:z" \
+    -v "$CONFIG_DIR:/workspaces/zmk-config:z" \
+    zmk-dev \
+    west build -d "$BUILD_DIR" -b "$BOARD" -- \
+        -DSHIELD="$SHIELD_NAME" \
+        -DZMK_CONFIG="/workspaces/zmk-config"
+
+BUILD_STATUS=$?
+
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+if [ $BUILD_STATUS -eq 0 ]; then
+    echo "✓ Build successful!"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo ""
+    echo "Firmware location:"
+    echo "  $ZMK_SOURCE/app/$BUILD_DIR/zephyr/zmk.uf2"
+    echo ""
+    echo "To flash:"
+    echo "  1. Put keyboard into bootloader mode"
+    echo "  2. Copy .uf2 file to mounted drive"
+else
+    echo "✗ Build failed!"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    exit $BUILD_STATUS
+fi

@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Enter ZMK development container shell
+# Usage: zmk-shell
+
+set -euo pipefail
+
+# Determine script location and derive paths
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ZMK_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+ZMK_SOURCE="$ZMK_ROOT/Source/zmk"
+CONFIG_DIR="$ZMK_ROOT/config"
+
+# Check if ZMK source exists
+if [ ! -d "$ZMK_SOURCE" ]; then
+    echo "Error: ZMK source not found at $ZMK_SOURCE"
+    echo "Run: cd $ZMK_ROOT && git submodule update --init --recursive"
+    exit 1
+fi
+
+# Build container image if it doesn't exist
+if ! podman image exists zmk-dev; then
+    echo "Building ZMK container image..."
+    podman build -t zmk-dev \
+        -f "$ZMK_SOURCE/.devcontainer/Dockerfile" \
+        "$ZMK_SOURCE/.devcontainer"
+fi
+
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "Entering ZMK Development Container"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "  ZMK source:     /workspaces/zmk"
+echo "  Your config:    /workspaces/zmk-config"
+echo "  Working dir:    /workspaces/zmk"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "First-time setup (if needed):"
+echo "  cd app/"
+echo "  west init -l app/"
+echo "  west update"
+echo ""
+echo "Manual build:"
+echo "  cd app/"
+echo "  west build -d build/left -b nice_nano_v2 -- \\"
+echo "    -DSHIELD=chocofi_left \\"
+echo "    -DZMK_CONFIG=/workspaces/zmk-config"
+echo ""
+echo "Type 'exit' to leave container"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+# Enter container shell
+podman run -it --rm \
+    --security-opt label=disable \
+    --workdir /workspaces/zmk \
+    -v "$ZMK_SOURCE:/workspaces/zmk:z" \
+    -v "$CONFIG_DIR:/workspaces/zmk-config:z" \
+    -p 3000:3000 \
+    zmk-dev \
+    /bin/bash
