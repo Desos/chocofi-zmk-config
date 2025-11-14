@@ -1,13 +1,19 @@
-# Chocofi keyboard build configuration
+# Chocofi keyboard build configuration with ZMK Studio
 # Board: Nice Nano v2
 # Display: Nice View (optional, remove if not using)
 #
 # Note: Chocofi uses the Corne shield definition because it's
 # electrically compatible. The shield name stays as "corne_left"
 # and "corne_right" - this is correct and expected.
+#
+# ZMK Studio is enabled on the left (central) side only.
+# Access Studio at: https://zmk.studio/
+# Unlock with: Layer 9 (MEDIA_L) + V key (5th key on bottom row)
 ---
 include:
   - board: nice_nano_v2
     shield: corne_left nice_view_adapter nice_view
+    snippet: studio-rpc-usb-uart
+    cmake-args: -DCONFIG_ZMK_STUDIO=y
   - board: nice_nano_v2
     shield: corne_right nice_view_adapter nice_view
