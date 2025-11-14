@@ -1,33 +1,37 @@
 #!/usr/bin/env bash
-# Build ZMK firmware using Podman container
-# Usage: zmk-build <board> <shield> [left|right]
+# Build ZMK firmware for Chocofi keyboard
+# Usage: zmk-build [left|right|both]
 #
 # Examples:
-#   zmk-build nice_nano_v2 chocofi left
-#   zmk-build nice_nano_v2 chocofi right
+#   zmk-build left    # Build left half only
+#   zmk-build right   # Build right half only
+#   zmk-build both    # Build both halves (default)
+#   zmk-build         # Same as 'both'
 
 set -euo pipefail
 
+# Chocofi configuration (hardcoded - you only have one keyboard!)
+BOARD="nice_nano_v2"
+SHIELD="corne"  # Chocofi uses Corne shield
+
 # Determine script location and derive paths
-# Resolve symlink to get actual script location
 SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 ZMK_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 ZMK_SOURCE="$ZMK_ROOT/Source/zmk"
 CONFIG_DIR="$ZMK_ROOT/config"
 
-# Parse arguments
-BOARD="${1:-}"
-SHIELD="${2:-}"
-SIDE="${3:-}"
+# Parse argument (side)
+SIDE="${1:-both}"
 
-# Validate arguments
-if [ -z "$BOARD" ] || [ -z "$SHIELD" ]; then
-    echo "Usage: zmk-build <board> <shield> [left|right]"
+# Validate argument
+if [[ ! "$SIDE" =~ ^(left|right|both)$ ]]; then
+    echo "Usage: zmk-build [left|right|both]"
     echo ""
     echo "Examples:"
-    echo "  zmk-build nice_nano_v2 chocofi left"
-    echo "  zmk-build nice_nano_v2 chocofi right"
+    echo "  zmk-build left    # Build left half"
+    echo "  zmk-build right   # Build right half"
+    echo "  zmk-build both    # Build both halves (default)"
     exit 1
 fi
 
@@ -52,52 +56,72 @@ if ! podman image exists zmk-dev; then
         "$ZMK_SOURCE/.devcontainer"
 fi
 
-# Determine build directory and shield name
-if [ -n "$SIDE" ]; then
-    BUILD_DIR="build/$SIDE"
-    SHIELD_NAME="${SHIELD}_${SIDE}"
-else
-    BUILD_DIR="build"
-    SHIELD_NAME="$SHIELD"
-fi
-
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "Building ZMK Firmware"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  Board:      $BOARD"
-echo "  Shield:     $SHIELD_NAME"
-echo "  Build dir:  $BUILD_DIR"
-echo "  Config:     $CONFIG_DIR"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo ""
-
-# Run build in container
-podman run -it --rm \
-    --security-opt label=disable \
-    --workdir /workspaces/zmk/app \
-    -v "$ZMK_SOURCE:/workspaces/zmk:z" \
-    -v "$CONFIG_DIR:/workspaces/zmk-config:z" \
-    zmk-dev \
-    west build -d "$BUILD_DIR" -b "$BOARD" -- \
-        -DSHIELD="$SHIELD_NAME" \
-        -DZMK_CONFIG="/workspaces/zmk-config"
-
-BUILD_STATUS=$?
-
-echo ""
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-if [ $BUILD_STATUS -eq 0 ]; then
-    echo "✓ Build successful!"
+# Function to build a single side
+build_side() {
+    local side=$1
+    local build_dir="build/$side"
+    local shield_name="${SHIELD}_${side}"
+    
+    # Add Studio snippet only for left side
+    local snippet_args=""
+    local cmake_args="-DZMK_CONFIG=/workspaces/zmk-config"
+    if [ "$side" = "left" ]; then
+        snippet_args="-S studio-rpc-usb-uart"
+        cmake_args="$cmake_args -DCONFIG_ZMK_STUDIO=y"
+    fi
+    
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "Building Chocofi - ${side^^} Half"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "  Board:      $BOARD"
+    echo "  Shield:     $shield_name"
+    echo "  Build dir:  $build_dir"
+    echo "  Studio:     $([ "$side" = "left" ] && echo "ENABLED" || echo "disabled")"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
-    echo "Firmware location:"
-    echo "  $ZMK_SOURCE/app/$BUILD_DIR/zephyr/zmk.uf2"
+    
+    # Run build in container
+    podman run -it --rm \
+        --security-opt label=disable \
+        --workdir /workspaces/zmk/app \
+        -v "$ZMK_SOURCE:/workspaces/zmk:z" \
+        -v "$CONFIG_DIR:/workspaces/zmk-config:z" \
+        zmk-dev \
+        west build -d "$build_dir" -b "$BOARD" $snippet_args -- \
+            -DSHIELD="$shield_name" \
+            $cmake_args
+    
+    local status=$?
+    
     echo ""
-    echo "To flash:"
-    echo "  1. Put keyboard into bootloader mode"
-    echo "  2. Copy .uf2 file to mounted drive"
-else
-    echo "✗ Build failed!"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    exit $BUILD_STATUS
+    if [ $status -eq 0 ]; then
+        echo "✓ ${side^^} half build successful!"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo ""
+        echo "Firmware: $ZMK_SOURCE/app/$build_dir/zephyr/zmk.uf2"
+    else
+        echo "✗ ${side^^} half build failed!"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        return $status
+    fi
+    
+    return 0
+}
+
+# Build requested side(s)
+if [ "$SIDE" = "both" ]; then
+    build_side "left" || exit 1
+    echo ""
+    build_side "right" || exit 1
+    echo ""
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "✓ Both halves built successfully!"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo ""
+    echo "Flash firmware:"
+    echo "  Left:  $ZMK_SOURCE/app/build/left/zephyr/zmk.uf2"
+    echo "  Right: $ZMK_SOURCE/app/build/right/zephyr/zmk.uf2"
+else
+    build_side "$SIDE"
 fi
