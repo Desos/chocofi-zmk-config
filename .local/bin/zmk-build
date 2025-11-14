@@ -9,7 +9,9 @@
 set -euo pipefail
 
 # Determine script location and derive paths
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Resolve symlink to get actual script location
+SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 ZMK_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 ZMK_SOURCE="$ZMK_ROOT/Source/zmk"
 CONFIG_DIR="$ZMK_ROOT/config"
