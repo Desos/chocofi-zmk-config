@@ -17,19 +17,31 @@ exit
 
 2. **Build firmware for Chocofi**:
 ```bash
-zmk-build nice_nano_v2 chocofi left
-zmk-build nice_nano_v2 chocofi right
+zmk-build
 ```
 
-### Edit Your Keymap
+### Daily Workflow
 
+1. **Edit your keymap:**
 ```bash
 hx config/chocofi.keymap
 ```
 
+2. **Build and flash:**
+```bash
+zmk-build && zmk-flash
+```
+
+That's it! The scripts handle everything automatically.
+
 ### Build Firmware
 
-**Option 1: GitHub Actions (Recommended for daily use)**
+**Option 1: Local Build (Recommended)**
+```bash
+zmk-build [left|right|both]  # Default: both
+```
+
+**Option 2: GitHub Actions**
 ```bash
 git add config/chocofi.keymap
 git commit -m "feat: update keymap"
@@ -38,18 +50,25 @@ git push origin main
 # Download .uf2 files from GitHub releases
 ```
 
-**Option 2: Local Build (For testing)**
-```bash
-zmk-build nice_nano_v2 chocofi left
-zmk-build nice_nano_v2 chocofi right
-# Output: Source/zmk/app/build/{left,right}/zephyr/zmk.uf2
-```
-
 ### Flash to Keyboard
 
+**Automated (Recommended):**
+```bash
+zmk-flash [left|right|both]  # Default: both
+```
+
+The script will:
+- Prompt you to plug in each keyboard half in bootloader mode
+- Automatically detect, mount, copy firmware, and unmount
+- Verify successful flashing
+- Guide you through the entire process
+
+**Manual:**
 1. Put keyboard half into bootloader mode (double-tap reset)
-2. Copy `.uf2` file to mounted drive
-3. Repeat for other half
+2. Mount: `udisksctl mount --block-device /dev/sda`
+3. Copy `.uf2` file to mounted drive
+4. Unmount: `udisksctl unmount --block-device /dev/sda`
+5. Repeat for other half
 
 ## Structure
 
@@ -67,14 +86,46 @@ Build firmware locally using Podman container.
 
 **Usage:**
 ```bash
-zmk-build <board> <shield> [left|right]
+zmk-build [left|right|both]  # Default: both
 ```
 
 **Examples:**
 ```bash
-zmk-build nice_nano_v2 chocofi left
-zmk-build nice_nano_v2 chocofi right
+zmk-build          # Build both halves
+zmk-build both     # Build both halves
+zmk-build left     # Build left half only
+zmk-build right    # Build right half only
 ```
+
+**Output:**
+- Left: `Source/zmk/app/build/left/zephyr/zmk.uf2`
+- Right: `Source/zmk/app/build/right/zephyr/zmk.uf2`
+
+### zmk-flash
+
+Flash firmware to keyboard halves automatically.
+
+**Usage:**
+```bash
+zmk-flash [left|right|both]  # Default: both
+```
+
+**Examples:**
+```bash
+zmk-flash          # Flash both halves (automated)
+zmk-flash both     # Flash both halves
+zmk-flash left     # Flash left half only
+zmk-flash right    # Flash right half only
+```
+
+**Features:**
+- No sudo required (uses udisksctl)
+- Automatic device detection
+- Verifies UF2 bootloader
+- Confirms successful copy
+- Clear prompts for which half to plug in
+
+**See:** `docs/workflow/flashing-firmware.md` for detailed guide
 
 ### zmk-shell
 

@@ -1,0 +1,294 @@
+#!/usr/bin/env bash
+# Flash ZMK firmware to Chocofi keyboard halves
+# Usage: zmk-flash [left|right|both]
+#
+# Examples:
+#   zmk-flash left    # Flash left half only
+#   zmk-flash right   # Flash right half only
+#   zmk-flash both    # Flash both halves (default)
+#   zmk-flash         # Same as 'both'
+
+set -euo pipefail
+
+# Determine script location and derive paths
+SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+ZMK_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+ZMK_SOURCE="$ZMK_ROOT/Source/zmk"
+
+# Firmware paths
+LEFT_FIRMWARE="$ZMK_SOURCE/app/build/left/zephyr/zmk.uf2"
+RIGHT_FIRMWARE="$ZMK_SOURCE/app/build/right/zephyr/zmk.uf2"
+
+# Device to flash (nice!nano bootloader appears as /dev/sda)
+DEVICE="/dev/sda"
+
+# Timeouts
+DEVICE_WAIT_TIMEOUT=60
+DEVICE_REMOVAL_TIMEOUT=30
+
+# Parse argument (side)
+SIDE="${1:-both}"
+
+# Validate argument
+if [[ ! "$SIDE" =~ ^(left|right|both)$ ]]; then
+    echo "Usage: zmk-flash [left|right|both]"
+    echo ""
+    echo "Examples:"
+    echo "  zmk-flash left    # Flash left half"
+    echo "  zmk-flash right   # Flash right half"
+    echo "  zmk-flash both    # Flash both halves (default)"
+    exit 1
+fi
+
+# Pre-flight checks
+check_dependencies() {
+    if ! command -v udisksctl &> /dev/null; then
+        echo "Error: udisksctl not found"
+        echo "Install udisks2 package or use manual flashing method"
+        exit 1
+    fi
+    
+    if ! command -v udevadm &> /dev/null; then
+        echo "Error: udevadm not found (should be part of systemd)"
+        exit 1
+    fi
+}
+
+check_firmware_exists() {
+    local side=$1
+    local firmware_path=""
+    
+    if [ "$side" = "left" ]; then
+        firmware_path="$LEFT_FIRMWARE"
+    else
+        firmware_path="$RIGHT_FIRMWARE"
+    fi
+    
+    if [ ! -f "$firmware_path" ]; then
+        echo "Error: Firmware not found: $firmware_path"
+        echo "Run 'zmk-build $side' first to build the firmware"
+        exit 1
+    fi
+}
+
+# Wait for device to appear
+wait_for_device() {
+    local side=$1
+    
+    echo "⏳ Waiting for ${side^^} half in bootloader mode..."
+    echo "   (Double-tap reset button on the keyboard half)"
+    echo "   Timeout in ${DEVICE_WAIT_TIMEOUT} seconds..."
+    echo ""
+    
+    # Check if device already exists
+    if [ -e "$DEVICE" ]; then
+        echo "⚠ Warning: $DEVICE already exists!"
+        echo "   Please unplug the device and start fresh."
+        return 1
+    fi
+    
+    # Use udevadm monitor to watch for device
+    # This is more robust than polling
+    local detected=false
+    
+    # Start monitoring in background, filter for sda add events
+    timeout "${DEVICE_WAIT_TIMEOUT}s" udevadm monitor --udev --subsystem-match=block 2>/dev/null | \
+        grep --line-buffered "add.*sda" | \
+        head -n1 &> /dev/null && detected=true || detected=false
+    
+    if [ "$detected" = false ]; then
+        echo "✗ Timeout: Device not detected within ${DEVICE_WAIT_TIMEOUT} seconds"
+        echo "   Make sure to double-tap the reset button to enter bootloader mode"
+        return 1
+    fi
+    
+    # Give the device a moment to settle
+    sleep 1
+    
+    if [ ! -e "$DEVICE" ]; then
+        echo "✗ Error: Device disappeared after detection"
+        return 1
+    fi
+    
+    echo "✓ Device detected!"
+    return 0
+}
+
+# Wait for device to be removed
+wait_for_device_removal() {
+    echo ""
+    echo "⏳ Unplug the keyboard half and wait for device to disconnect..."
+    
+    local timeout=$DEVICE_REMOVAL_TIMEOUT
+    while [ -e "$DEVICE" ] && [ $timeout -gt 0 ]; do
+        sleep 0.5
+        ((timeout--))
+    done
+    
+    if [ -e "$DEVICE" ]; then
+        echo "⚠ Warning: Device still connected after ${DEVICE_REMOVAL_TIMEOUT} seconds"
+        echo "   Please unplug it before continuing"
+        read -p "Press Enter when device is unplugged..."
+    fi
+    
+    echo "✓ Device disconnected"
+    echo ""
+}
+
+# Flash a single side
+flash_side() {
+    local side=$1
+    local firmware_path=""
+    
+    if [ "$side" = "left" ]; then
+        firmware_path="$LEFT_FIRMWARE"
+    else
+        firmware_path="$RIGHT_FIRMWARE"
+    fi
+    
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "Flashing ${side^^} Half"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo ""
+    
+    # Wait for device to appear
+    if ! wait_for_device "$side"; then
+        return 1
+    fi
+    
+    # Mount the device using udisksctl (no sudo required!)
+    local mount_output
+    mount_output=$(udisksctl mount --block-device "$DEVICE" --no-user-interaction 2>&1)
+    
+    if [ $? -ne 0 ]; then
+        echo "✗ Failed to mount device"
+        echo "$mount_output"
+        return 1
+    fi
+    
+    # Extract mount point from output like: "Mounted /dev/sda at /run/media/peter/NICENANO"
+    local mount_point
+    mount_point=$(echo "$mount_output" | grep -oP 'at \K.*' | tr -d '\n')
+    
+    if [ -z "$mount_point" ]; then
+        echo "✗ Failed to determine mount point"
+        echo "$mount_output"
+        return 1
+    fi
+    
+    echo "✓ Mounted at $mount_point"
+    
+    # Verify it's a UF2 bootloader
+    if [ ! -f "$mount_point/INFO_UF2.TXT" ]; then
+        echo "✗ Error: Not a UF2 bootloader device"
+        echo "   Expected to find INFO_UF2.TXT at mount point"
+        udisksctl unmount --block-device "$DEVICE" --no-user-interaction &> /dev/null
+        return 1
+    fi
+    
+    echo "✓ Verified UF2 bootloader"
+    
+    # Copy firmware
+    echo -n "✓ Copying firmware... "
+    if ! cp "$firmware_path" "$mount_point/firmware.uf2" 2>/dev/null; then
+        echo "failed"
+        echo "✗ Error: Failed to copy firmware"
+        udisksctl unmount --block-device "$DEVICE" --no-user-interaction &> /dev/null
+        return 1
+    fi
+    echo "done"
+    
+    # Verify copy succeeded
+    local source_size dest_size
+    source_size=$(stat -c%s "$firmware_path" 2>/dev/null || echo "0")
+    dest_size=$(stat -c%s "$mount_point/firmware.uf2" 2>/dev/null || echo "0")
+    
+    if [ "$source_size" != "$dest_size" ] || [ "$source_size" = "0" ]; then
+        echo "✗ Error: Firmware copy verification failed"
+        echo "   Source size: $source_size bytes"
+        echo "   Dest size: $dest_size bytes"
+        udisksctl unmount --block-device "$DEVICE" --no-user-interaction &> /dev/null
+        return 1
+    fi
+    
+    echo "✓ Verified copy successful ($source_size bytes)"
+    
+    # Sync to ensure write completes
+    sync
+    
+    # Unmount
+    if ! udisksctl unmount --block-device "$DEVICE" --no-user-interaction &> /dev/null; then
+        echo "⚠ Warning: Failed to unmount cleanly (device may have auto-ejected)"
+    else
+        echo "✓ Unmounted"
+    fi
+    
+    echo ""
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "✓ ${side^^} half flashed successfully!"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    
+    return 0
+}
+
+# Main execution
+main() {
+    echo ""
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "ZMK Firmware Flasher"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    
+    # Check dependencies
+    check_dependencies
+    
+    # Check firmware files exist
+    if [ "$SIDE" = "both" ]; then
+        check_firmware_exists "left"
+        check_firmware_exists "right"
+        echo "  Left:  $LEFT_FIRMWARE"
+        echo "  Right: $RIGHT_FIRMWARE"
+    elif [ "$SIDE" = "left" ]; then
+        check_firmware_exists "left"
+        echo "  Left:  $LEFT_FIRMWARE"
+    else
+        check_firmware_exists "right"
+        echo "  Right: $RIGHT_FIRMWARE"
+    fi
+    
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo ""
+    
+    # Flash requested side(s)
+    if [ "$SIDE" = "both" ]; then
+        if ! flash_side "left"; then
+            echo ""
+            echo "✗ Failed to flash left half"
+            exit 1
+        fi
+        
+        wait_for_device_removal
+        
+        if ! flash_side "right"; then
+            echo ""
+            echo "✗ Failed to flash right half"
+            exit 1
+        fi
+        
+        echo ""
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "✓ Both halves flashed! Your keyboard is ready to use."
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    else
+        if ! flash_side "$SIDE"; then
+            echo ""
+            echo "✗ Failed to flash $SIDE half"
+            exit 1
+        fi
+    fi
+    
+    echo ""
+}
+
+# Run main function
+main
