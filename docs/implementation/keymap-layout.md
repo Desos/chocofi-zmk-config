@@ -138,17 +138,17 @@ H_ESC   H_RET   NUMER
 **Right Hand:**
 ```
 VOL+    HOME    PG_UP   END     H_W
-VOL-    H_N     H_E     H_I     MUTE/H_GUI
+VOL-    H_N     H_E     H_I     H_O/H_GUI
 PLAY    H_H     PG_DN   H_G     H_J
 ---     ---     ---
 ```
 
 **Notes:**
 - H_ prefix = HYPER modifier (GUI+Alt+Ctrl+Shift) combined with key
-- Hyperised keys follow mnemonic pattern: H_W, H_N, H_E, H_I, H_H, H_G, H_J (HYPER + alpha key at that position)
-- O position: MUTE (tap) / H_GUI (hold) - provides H_GUI access from right hand
+- Hyperised keys follow mnemonic pattern: H_W, H_N, H_E, H_I, H_O, H_H, H_G, H_J (HYPER + alpha key at that position)
+- O position: H_O (tap) / H_GUI (hold) - provides both mnemonic H_O and H_GUI access
 - Left thumb keys become hyperised when RIGHT_NAV is held: H_ESC, H_RET
-- Media controls: PLAY/PAUSE, VOL+/-, MUTE
+- Media controls: PLAY/PAUSE, VOL+/-
 - Navigation: HOME, END, PG_UP, PG_DN
 
 ---
@@ -606,7 +606,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 - **Layer 0 (ALPHA):** O
 - **Layer 1 (WASD):** --- (transparent)
 - **Layer 2 (LEFT_NAV):** --- (transparent)
-- **Layer 3 (RIGHT_NAV):** Mute (tap) / H_GUI (hold)
+- **Layer 3 (RIGHT_NAV):** H_O (tap) / H_GUI (hold)
 - **Layer 4 (NUMER):** { (left brace)
 - **Layer 4+RSFT:** } (right brace)
 - **Layer 5 (LEFT_MODS):** --- (transparent)
