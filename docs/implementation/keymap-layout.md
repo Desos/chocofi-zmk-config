@@ -29,14 +29,15 @@ This allows quick access to both number/symbol sets and function keys without ne
 
 - **Layer 0:** ALPHA - Base typing layer (Colemak-DH)
 - **Layer 1:** WASD - Gaming layer
-- **Layer 2:** LEFT_NAV - Left-hand navigation
-- **Layer 3:** RIGHT_NAV - Right-hand media and navigation
+- **Layer 2:** LEFT_NAV - Left-hand navigation with HYPER keys
+- **Layer 3:** RIGHT_NAV - Right-hand media and navigation with HYPER keys
 - **Layer 4:** NUMER - Numbers and symbols
 - **Layer 4+RSFT:** NUMER with custom RSFT remapping (alternate symbol set)
 - **Layer 5:** LEFT_MODS - Left-hand modifiers
 - **Layer 6:** RIGHT_MODS - Right-hand modifiers
-- **Layer 7:** MOUSE - Mouse emulation (LEFT_NAV + RIGHT_NAV)
-- **Layer 8:** SYSTEM - System and Bluetooth controls (LEFT_NAV + LEFT_MODS)
+- **Layer 7:** MOUSE - Mouse emulation and scroll controls (LEFT_NAV + RIGHT_NAV)
+- **Layer 8:** LEFT_SYS - Left-hand system and Bluetooth controls (LEFT_NAV + LEFT_MODS)
+- **Layer 9:** RIGHT_SYS - Right-hand system and Bluetooth controls (RIGHT_NAV + RIGHT_MODS)
 
 ---
 
@@ -99,9 +100,9 @@ CTRL    A       S       D       F
 
 **Left Hand:**
 ```
-CTRL    LEFT    UP      RIGHT   PASTE
-GUI     BSPC    SHIFT   DEL     COPY
-HYPER   UNDO    DOWN    REDO    CUT
+H_ESC  LEFT    UP      RIGHT   PASTE
+H_GUI  BSPC    H_RET   DEL     COPY
+PrScr  UNDO    DOWN    REDO    CUT
         ---     ---     ---
 ```
 
@@ -114,7 +115,7 @@ HYPER   UNDO    DOWN    REDO    CUT
 ```
 
 **Notes:**
-- HYPER = GUI+Alt+Ctrl+Shift (all modifiers)
+- H_, HYPER = GUI+Alt+Ctrl+Shift (all modifiers)
 - PASTE = Ctrl+V
 - COPY = Ctrl+C
 - CUT = Ctrl+X
@@ -135,18 +136,18 @@ HYPER   UNDO    DOWN    REDO    CUT
 
 **Right Hand:**
 ```
-VOL+    HOME    PG_UP   END     GAME
-VOL-    PREV    K_APP   NEXT    MUTE
-PLAY    BSPC    PG_DN   DEL     PSCRN
+VOL+    HOME    PG_UP   END     H_RETURN
+VOL-    PREV    H_F12   NEXT    MUTE
+PLAY    H_LEFT  PG_DN   H_RIGHT H_TAB
 ---     ---     ---
 ```
 
 **Notes:**
-- GAME = Toggle Layer 1 (gaming layer)
-- K_APP = Application/Menu key (with SHIFT mod-tap)
+- H_ prefix = HYPER modifier (GUI+Alt+Ctrl+Shift) combined with key
+- H_RETURN, H_F12, H_LEFT, H_RIGHT, H_TAB = HYPER + respective key
 - Media controls: PREV/NEXT track, PLAY/PAUSE, VOL+/-, MUTE
 - Navigation: HOME, END, PG_UP, PG_DN
-- PSCRN = Print Screen
+- HYPER keys allow triggering complex shortcuts with single keypresses
 
 ---
 
@@ -217,7 +218,7 @@ GUI     ALT     SHIFT   CTRL    ---
 
 **Right Hand:**
 ```
----     ---     ---     ---     GAME
+---     ---     ---     ---     ---
 ---     ---     ---     ---     ---
 ---     ---     ---     ---     ---
 ---     ---     ---
@@ -243,7 +244,7 @@ GUI     ALT     SHIFT   CTRL    ---
 
 **Right Hand:**
 ```
----     ---     ---     ---     GAME
+---     ---     ---     ---     ---
 ---     CTRL    SHIFT   ALT     GUI
 ---     ---     ---     ---     ---
 ---     ---     ---
@@ -265,35 +266,36 @@ GUI     ALT     SHIFT   CTRL    ---
 **Left Hand:**
 ```
 ---     M_LEFT  M_UP    M_RIGHT ---
-GUI     ALT     SHIFT   CTRL    ---
+---     ---     ---     ---     ---
 ---     ---     M_DOWN  ---     ---
         ---     ---     ---
 ```
 
 **Right Hand:**
 ```
----     LCLK    MCLK    RCLK    ---
----     CTRL    SHIFT   ALT     GUI
----     ---     ---     ---     ---
+---     SC_L    SC_U    SC_R   ---
+---     LCLK    MCLK    RCLK   ---
+---     ---     SC_D     ---    ---
 ---     ---     ---
 ```
 
 **Notes:**
 - Mouse movement: M_LEFT, M_RIGHT, M_UP, M_DOWN
 - Mouse clicks: LCLK (left), MCLK (middle), RCLK (right)
-- Modifiers available on both hands for modified clicks
+- Scroll controls: SC_L (scroll left), SC_U (scroll up), SC_R (scroll right)
+- Scroll and mouse controls combined for complete pointer control
 
 ---
 
-### Layer 8: SYSTEM (System & Bluetooth Controls)
+### Layer 8: LEFT_SYS (System & Bluetooth Controls)
 
 **Activation:** LEFT_NAV (Layer 2) + LEFT_MODS (Layer 5) held together
 
 **Left Hand:**
 ```
 BT_0    BT_1    BT_2    BT_3    BT_4
-RESET   BOOT    STUDIO  ---     ---
----     ---     ---     ---     BT_CLR
+RESET   BOOT    STUDIO  ---     BT_CLR
+---     ---     ---     REISUB  ---
         ---     ---     ---
 ```
 
@@ -305,12 +307,35 @@ RESET   BOOT    STUDIO  ---     ---
 ---     ---     ---
 ```
 
+### Layer 9: RIGHT_SYS (System & Bluetooth Controls)
+
+**Activation:** RIGHT_NAV (Layer 3) + RIGHT_MODS (Layer 6) held together
+
+**Left Hand:**
+```
+---     ---     ---     ---     ---
+---     ---     ---     ---     ---
+---     ---     ---     ---     ---
+        ---     ---     ---
+```
+
+**Right Hand:**
+```
+BT_4    BT_3    BT_2    BT_1    BT_0
+BT_CLR  ---     STUDIO  BOOT    RESET
+---     REISUB  ---     ---     GAME
+---     ---     ---
+```
+
 **Notes:**
+- Mirrors Layer 8 (LEFT_SYS) on the right hand
 - BT_0 through BT_4 = Bluetooth profile selection (5 profiles)
 - BT_CLR = Clear current Bluetooth profile
 - RESET = System reset
 - BOOT = Enter bootloader mode (for firmware flashing)
 - STUDIO = Unlock ZMK Studio (for live keymap editing)
+- REISUB = Linux emergency reboot sequence
+- GAME = Toggle Layer 1 (gaming layer)
 
 ---
 
@@ -320,13 +345,14 @@ RESET   BOOT    STUDIO  ---     ---
 
 - **Layer 0 (ALPHA):** Q
 - **Layer 1 (WASD):** 1
-- **Layer 2 (LEFT_NAV):** CTRL
+- **Layer 2 (LEFT_NAV):** H_ESC (HYPER + Escape)
 - **Layer 3 (RIGHT_NAV):** --- (transparent)
 - **Layer 4 (NUMER):** ^ (caret)
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** --- (transparent)
-- **Layer 8 (SYSTEM):** BT_0 (Bluetooth profile 0)
+- **Layer 8 (LEFT_SYS):** BT_0 (Bluetooth profile 0)
+- **Layer 9 (RIGHT_SYS):** --- (transparent)
 
 ### Position: Top Row, Column 2 (K position)
 
@@ -339,7 +365,7 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** Mouse move left
-- **Layer 8 (SYSTEM):** BT_1 (Bluetooth profile 1)
+- **Layer 8 (LEFT_SYS):** BT_1 (Bluetooth profile 1)
 
 ### Position: Top Row, Column 3 (F position)
 
@@ -352,7 +378,7 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** Mouse move up
-- **Layer 8 (SYSTEM):** BT_2 (Bluetooth profile 2)
+- **Layer 8 (LEFT_SYS):** BT_2 (Bluetooth profile 2)
 
 ### Position: Top Row, Column 4 (P position)
 
@@ -365,7 +391,7 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** Mouse move right
-- **Layer 8 (SYSTEM):** BT_3 (Bluetooth profile 3)
+- **Layer 8 (LEFT_SYS):** BT_3 (Bluetooth profile 3)
 
 ### Position: Top Row, Column 5 (B position)
 
@@ -377,7 +403,7 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** --- (transparent)
-- **Layer 8 (SYSTEM):** BT_4 (Bluetooth profile 4)
+- **Layer 8 (LEFT_SYS):** BT_4 (Bluetooth profile 4)
 
 ### Position: Top Row, Column 6 (SEMI position)
 
@@ -390,7 +416,8 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** --- (transparent)
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 8 (LEFT_SYS):** --- (transparent)
+- **Layer 9 (RIGHT_SYS):** BT_4 (Bluetooth profile 4)
 
 ### Position: Top Row, Column 7 (L position)
 
@@ -401,8 +428,9 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 4 (NUMER):** @ (at sign)
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
-- **Layer 7 (MOUSE):** Left click
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 7 (MOUSE):** Scroll left
+- **Layer 8 (LEFT_SYS):** --- (transparent)
+- **Layer 9 (RIGHT_SYS):** BT_3 (Bluetooth profile 3)
 
 ### Position: Top Row, Column 8 (U position)
 
@@ -413,8 +441,9 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 4 (NUMER):** $ (dollar)
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
-- **Layer 7 (MOUSE):** Middle click
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 7 (MOUSE):** Scroll up
+- **Layer 8 (LEFT_SYS):** --- (transparent)
+- **Layer 9 (RIGHT_SYS):** BT_2 (Bluetooth profile 2)
 
 ### Position: Top Row, Column 9 (Y position)
 
@@ -425,8 +454,9 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 4 (NUMER):** # (hash)
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
-- **Layer 7 (MOUSE):** Right click
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 7 (MOUSE):** Scroll right
+- **Layer 8 (LEFT_SYS):** --- (transparent)
+- **Layer 9 (RIGHT_SYS):** BT_1 (Bluetooth profile 1)
 
 ### Position: Top Row, Column 10 (W position)
 
@@ -438,19 +468,21 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 5 (LEFT_MODS):** Toggle Layer 1 (WASD/Gaming)
 - **Layer 6 (RIGHT_MODS):** Toggle Layer 1 (WASD/Gaming)
 - **Layer 7 (MOUSE):** --- (transparent)
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 8 (LEFT_SYS):** --- (transparent)
+- **Layer 9 (RIGHT_SYS):** BT_0 (Bluetooth profile 0)
 
 ### Position: Home Row, Column 1 (A position)
 
 - **Layer 0 (ALPHA):** A
 - **Layer 1 (WASD):** Left Shift
-- **Layer 2 (LEFT_NAV):** GUI
+- **Layer 2 (LEFT_NAV):** H_GUI (HYPER + GUI)
 - **Layer 3 (RIGHT_NAV):** --- (transparent)
 - **Layer 4 (NUMER):** * (asterisk)
 - **Layer 5 (LEFT_MODS):** GUI (tap: sticky, hold: regular)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
-- **Layer 7 (MOUSE):** GUI
-- **Layer 8 (SYSTEM):** System reset
+- **Layer 7 (MOUSE):** --- (transparent)
+- **Layer 8 (LEFT_SYS):** System reset
+- **Layer 9 (RIGHT_SYS):** --- (transparent)
 
 ### Position: Home Row, Column 2 (R position)
 
@@ -463,20 +495,21 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 5 (LEFT_MODS):** Alt (tap: sticky, hold: regular)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** Alt
-- **Layer 8 (SYSTEM):** Bootloader
+- **Layer 8 (LEFT_SYS):** Bootloader
 
 ### Position: Home Row, Column 3 (S position)
 
 - **Layer 0 (ALPHA):** S
 - **Layer 1 (WASD):** W
-- **Layer 2 (LEFT_NAV):** SHIFT
+- **Layer 2 (LEFT_NAV):** H_RET (HYPER + Return)
 - **Layer 3 (RIGHT_NAV):** --- (transparent)
 - **Layer 4 (NUMER):** 5
 - **Layer 4+RSFT:** F5
 - **Layer 5 (LEFT_MODS):** Shift (tap: sticky, hold: regular)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
-- **Layer 7 (MOUSE):** Shift
-- **Layer 8 (SYSTEM):** Studio unlock
+- **Layer 7 (MOUSE):** --- (transparent)
+- **Layer 8 (LEFT_SYS):** Studio unlock
+- **Layer 9 (RIGHT_SYS):** --- (transparent)
 
 ### Position: Home Row, Column 4 (T position)
 
@@ -489,7 +522,7 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 5 (LEFT_MODS):** Ctrl (tap: sticky, hold: regular)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** Ctrl
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 8 (LEFT_SYS):** --- (transparent)
 
 ### Position: Home Row, Column 5 (SPACE position)
 
@@ -501,7 +534,8 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** --- (transparent)
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 8 (LEFT_SYS):** Bluetooth clear
+- **Layer 9 (RIGHT_SYS):** --- (transparent)
 
 ### Position: Home Row, Column 6 (COMMA position)
 
@@ -514,7 +548,8 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** --- (transparent)
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 8 (LEFT_SYS):** --- (transparent)
+- **Layer 9 (RIGHT_SYS):** Bluetooth clear
 
 ### Position: Home Row, Column 7 (N position)
 
@@ -526,8 +561,9 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 4+RSFT:** > (greater than)
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** Ctrl (tap: sticky, hold: regular)
-- **Layer 7 (MOUSE):** Ctrl
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 7 (MOUSE):** Left click
+- **Layer 8 (LEFT_SYS):** --- (transparent)
+- **Layer 9 (RIGHT_SYS):** --- (transparent)
 
 ### Position: Home Row, Column 8 (E position)
 
@@ -539,8 +575,9 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 4+RSFT:** ) (right paren)
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** Shift (tap: sticky, hold: regular)
-- **Layer 7 (MOUSE):** Shift
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 7 (MOUSE):** Middle click
+- **Layer 8 (LEFT_SYS):** --- (transparent)
+- **Layer 9 (RIGHT_SYS):** Studio unlock
 
 ### Position: Home Row, Column 9 (I position)
 
@@ -552,8 +589,9 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 4+RSFT:** ] (right bracket)
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** Alt (tap: sticky, hold: regular)
-- **Layer 7 (MOUSE):** Alt
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 7 (MOUSE):** Right click
+- **Layer 8 (LEFT_SYS):** --- (transparent)
+- **Layer 9 (RIGHT_SYS):** Bootloader
 
 ### Position: Home Row, Column 10 (O position)
 
@@ -566,19 +604,21 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** GUI (tap: sticky, hold: regular)
 - **Layer 7 (MOUSE):** GUI
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 8 (LEFT_SYS):** --- (transparent)
+- **Layer 9 (RIGHT_SYS):** System reset
 
 ### Position: Bottom Row, Column 1 (Z position)
 
 - **Layer 0 (ALPHA):** Z
 - **Layer 1 (WASD):** Left Ctrl
-- **Layer 2 (LEFT_NAV):** Hyper (GUI+Alt+Ctrl+Shift)
+- **Layer 2 (LEFT_NAV):** Print Screen
 - **Layer 3 (RIGHT_NAV):** --- (transparent)
 - **Layer 4 (NUMER):** + (plus)
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** --- (transparent)
-- **Layer 8 (SYSTEM):** Bluetooth clear
+- **Layer 8 (LEFT_SYS):** --- (transparent)
+- **Layer 9 (RIGHT_SYS):** --- (transparent)
 
 ### Position: Bottom Row, Column 2 (X position)
 
@@ -591,7 +631,7 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** --- (transparent)
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 8 (LEFT_SYS):** --- (transparent)
 
 ### Position: Bottom Row, Column 3 (C position)
 
@@ -604,7 +644,7 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** Mouse move down
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 8 (LEFT_SYS):** --- (transparent)
 
 ### Position: Bottom Row, Column 4 (D position)
 
@@ -617,7 +657,8 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** --- (transparent)
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 8 (LEFT_SYS):** REISUB (Linux emergency reboot)
+- **Layer 9 (RIGHT_SYS):** --- (transparent)
 
 ### Position: Bottom Row, Column 5 (V position)
 
@@ -630,7 +671,7 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** --- (transparent)
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 8 (LEFT_SYS):** --- (transparent)
 
 ### Position: Bottom Row, Column 6 (QUOTE position)
 
@@ -643,7 +684,8 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** --- (transparent)
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 8 (LEFT_SYS):** --- (transparent)
+- **Layer 9 (RIGHT_SYS):** --- (transparent)
 
 ### Position: Bottom Row, Column 7 (H position)
 
@@ -655,7 +697,8 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** --- (transparent)
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 8 (LEFT_SYS):** --- (transparent)
+- **Layer 9 (RIGHT_SYS):** REISUB (Linux emergency reboot)
 
 ### Position: Bottom Row, Column 8 (M position)
 
@@ -666,8 +709,9 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 4 (NUMER):** ~ (tilde)
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
-- **Layer 7 (MOUSE):** --- (transparent)
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 7 (MOUSE):** Scroll down
+- **Layer 8 (LEFT_SYS):** --- (transparent)
+- **Layer 9 (RIGHT_SYS):** --- (transparent)
 
 ### Position: Bottom Row, Column 9 (G position)
 
@@ -679,7 +723,8 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** --- (transparent)
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 8 (LEFT_SYS):** --- (transparent)
+- **Layer 9 (RIGHT_SYS):** --- (transparent)
 
 ### Position: Bottom Row, Column 10 (J position)
 
@@ -691,7 +736,8 @@ RESET   BOOT    STUDIO  ---     ---
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** --- (transparent)
-- **Layer 8 (SYSTEM):** --- (transparent)
+- **Layer 8 (LEFT_SYS):** --- (transparent)
+- **Layer 9 (RIGHT_SYS):** Toggle Layer 1 (WASD/Gaming)
 
 ### Position: Thumb Row, Left 1 (ESC position)
 
@@ -735,7 +781,7 @@ RESET   BOOT    STUDIO  ---     ---
 ### Conditional Layers
 
 - **Layer 7 (MOUSE)** activates when LEFT_NAV (Layer 2) + RIGHT_NAV (Layer 3) are both held
-- **Layer 8 (SYSTEM)** activates when LEFT_NAV (Layer 2) + LEFT_MODS (Layer 5) are held
+- **Layer 8 (LEFT_SYS)** activates when LEFT_NAV (Layer 2) + LEFT_MODS (Layer 5) are held
 
 ### Mod-Morph Behaviors
 
