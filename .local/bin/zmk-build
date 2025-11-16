@@ -62,6 +62,18 @@ build_side() {
     local build_dir="build/$side"
     local shield_name="${SHIELD}_${side}"
     
+    # Check if build cache needs cleaning (shield configuration changed)
+    local cache_file="$ZMK_SOURCE/app/$build_dir/.shield_cache"
+    local current_shield="${shield_name} nice_view_adapter nice_view"
+    
+    if [ -f "$cache_file" ]; then
+        local cached_shield=$(cat "$cache_file")
+        if [ "$cached_shield" != "$current_shield" ]; then
+            echo "Shield configuration changed, cleaning build cache..."
+            rm -rf "$ZMK_SOURCE/app/$build_dir"
+        fi
+    fi
+    
     # Explicitly specify keymap file for both halves
     local snippet_args=""
     local cmake_args="-DZMK_CONFIG=/workspaces/zmk-config -DKEYMAP_FILE=/workspaces/zmk-config/chocofi.keymap"
@@ -96,6 +108,9 @@ build_side() {
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         echo ""
         echo "Firmware: $ZMK_SOURCE/app/$build_dir/zephyr/zmk.uf2"
+        
+        # Save shield configuration for cache checking
+        echo "$current_shield" > "$cache_file"
     else
         echo "✗ ${side^^} half build failed!"
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
