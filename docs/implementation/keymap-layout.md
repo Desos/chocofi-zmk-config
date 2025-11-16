@@ -2,6 +2,29 @@
 
 This document provides a complete reference for all layers and key mappings in the Chocofi keyboard configuration.
 
+## Custom Shift Implementation
+
+This keymap uses a **custom shift system** on the NUMER layer that differs from standard keyboard behavior:
+
+### Standard Shift (ALPHA Layer)
+On the base ALPHA layer, shift works normally - it capitalizes letters and accesses standard shifted symbols (e.g., `,` → `.`).
+
+### Custom RSFT Remapping (NUMER Layer)
+On the NUMER layer, **RSFT (Right Shift on thumb)** acts as a **layer modifier** that completely remaps keys to different symbols:
+
+- **Without RSFT**: Numbers and primary symbols (`1`, `2`, `3`, `@`, `$`, etc.)
+- **With RSFT**: Function keys and alternate symbols (`F1`, `F2`, `F3`, `£`, `€`, etc.)
+
+This is **not** the standard shift behavior - it's a general remapping where RSFT changes what keys are associated with what other keys. Think of it as "Layer 4 + RSFT = Layer 4 alternate mapping" rather than traditional shift.
+
+**Key Difference:**
+- ALPHA layer: Any shift key produces standard shifted characters
+- NUMER layer: Only RSFT (thumb key) triggers the custom remapping via mod-morph behaviors
+
+This allows quick access to both number/symbol sets and function keys without needing a separate layer.
+
+---
+
 ## Layer Overview
 
 - **Layer 0:** ALPHA - Base typing layer (Colemak-DH)
@@ -9,7 +32,7 @@ This document provides a complete reference for all layers and key mappings in t
 - **Layer 2:** LEFT_NAV - Left-hand navigation
 - **Layer 3:** RIGHT_NAV - Right-hand media and navigation
 - **Layer 4:** NUMER - Numbers and symbols
-- **Layer 4+RSFT:** NUMER with Right Shift modifier (mod-morph behaviors)
+- **Layer 4+RSFT:** NUMER with custom RSFT remapping (alternate symbol set)
 - **Layer 5:** LEFT_MODS - Left-hand modifiers
 - **Layer 6:** RIGHT_MODS - Right-hand modifiers
 - **Layer 7:** MOUSE - Mouse emulation (LEFT_NAV + RIGHT_NAV)
@@ -154,9 +177,9 @@ PLAY    BSPC    PG_DN   DEL     PSCRN
 
 ---
 
-### Layer 4+RSFT: NUMER with Right Shift
+### Layer 4+RSFT: NUMER with Custom RSFT Remapping
 
-When RSFT (sticky shift on thumb) is held, mod-morph behaviors transform keys:
+When RSFT (sticky shift on thumb) is held, **custom mod-morph behaviors** remap keys to an alternate symbol set. This is **not standard shift behavior** - it's a complete key remapping:
 
 **Left Hand:**
 ```
@@ -174,16 +197,11 @@ When RSFT (sticky shift on thumb) is held, mod-morph behaviors transform keys:
 ---     S+TAB   S+F12
 ```
 
-**Transformations:**
-- Numbers 1-9 → F1-F9
-- 0 → F10
-- `!` → `?`
-- `/` → `\`
-- `<` → `>`
-- `(` → `)`
-- `[` → `]`
-- `{` → `}`
-- `=` → `` ` ``
+**Custom RSFT Remappings:**
+- **Numbers → Function Keys:** `1`→`F1`, `2`→`F2`, `3`→`F3`, `4`→`F4`, `5`→`F5`, `6`→`F6`, `7`→`F7`, `8`→`F8`, `9`→`F9`, `0`→`F10`
+- **Symbol Remappings:** `!`→`?`, `/`→`\`, `<`→`>`, `(`→`)`, `[`→`]`, `{`→`}`, `=`→`` ` ``
+
+**Important:** This only responds to RSFT (the sticky shift on your right thumb), not any shift key. This creates a custom "alternate symbol layer" accessible via the thumb shift, allowing quick access to both number/symbol sets and function keys without switching layers.
 
 ---
 
@@ -721,21 +739,32 @@ RESET   BOOT    STUDIO  ---     ---
 
 ### Mod-Morph Behaviors
 
-The following keys change when RSFT (sticky shift on thumb) is held:
+This keymap uses mod-morph behaviors differently on different layers:
+
+**ALPHA Layer (Standard Shift):**
+- `,` → `.` when **any shift** is held (standard typing behavior)
+- This is normal shift functionality for typing
+
+**NUMER Layer (Custom RSFT Remapping):**
+The following keys change **only when RSFT (sticky shift on thumb) is held**. This is a custom remapping system, not standard shift:
 
 **Numbers → Function Keys:**
-- 1-9 → F1-F9
-- 0 → F10
+- `1` → `F1`, `2` → `F2`, `3` → `F3`, `4` → `F4`, `5` → `F5`
+- `6` → `F6`, `7` → `F7`, `8` → `F8`, `9` → `F9`, `0` → `F10`
 
-**Symbols:**
+**Symbol Remappings:**
 - `!` → `?`
 - `/` → `\`
-- `,` → `.` (on base layer)
 - `<` → `>`
 - `(` → `)`
 - `[` → `]`
 - `{` → `}`
 - `=` → `` ` ``
+
+**Why the difference?**
+- ALPHA uses standard shift for normal typing
+- NUMER uses RSFT as a **layer modifier** to access an alternate symbol set
+- This allows the NUMER layer to effectively have two "sub-layers" accessible via the thumb shift
 
 ### Sticky Behaviors
 
