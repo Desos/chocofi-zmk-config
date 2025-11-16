@@ -42,7 +42,6 @@
             flavor = "hold-preferred";
             bindings = <&mo>, <&hyper>;
         };
-    };
 
         // Mod-morph: comma to period with shift (ALPHA layer)
         comma_period: comma_period {
@@ -203,10 +202,12 @@
             #binding-cells = <1>;
             wait-ms = <0>;
             tap-ms = <0>;
-            bindings = <&macro_press &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>,
-                       <&macro_param_1to1>,
-                       <&macro_tap &kp MACRO_PLACEHOLDER>,
-                       <&macro_release &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>;
+            bindings =
+                <&macro_press &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>
+                , <&macro_param_1to1>
+                , <&macro_tap &kp MACRO_PLACEHOLDER>
+                , <&macro_release &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>
+                ;
         };
 
         // REISUB macro for Linux emergency reboot
