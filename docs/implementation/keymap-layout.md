@@ -366,6 +366,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** Mouse move left
 - **Layer 8 (LEFT_SYS):** BT_1 (Bluetooth profile 1)
+- **Layer 9 (RIGHT_SYS):** --- (transparent)
 
 ### Position: Top Row, Column 3 (F position)
 
@@ -379,6 +380,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** Mouse move up
 - **Layer 8 (LEFT_SYS):** BT_2 (Bluetooth profile 2)
+- **Layer 9 (RIGHT_SYS):** --- (transparent)
 
 ### Position: Top Row, Column 4 (P position)
 
@@ -392,6 +394,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** Mouse move right
 - **Layer 8 (LEFT_SYS):** BT_3 (Bluetooth profile 3)
+- **Layer 9 (RIGHT_SYS):** --- (transparent)
 
 ### Position: Top Row, Column 5 (B position)
 
@@ -404,6 +407,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** --- (transparent)
 - **Layer 8 (LEFT_SYS):** BT_4 (Bluetooth profile 4)
+- **Layer 9 (RIGHT_SYS):** --- (transparent)
 
 ### Position: Top Row, Column 6 (SEMI position)
 
@@ -496,6 +500,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** Alt
 - **Layer 8 (LEFT_SYS):** Bootloader
+- **Layer 9 (RIGHT_SYS):** --- (transparent)
 
 ### Position: Home Row, Column 3 (S position)
 
@@ -523,6 +528,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** Ctrl
 - **Layer 8 (LEFT_SYS):** --- (transparent)
+- **Layer 9 (RIGHT_SYS):** --- (transparent)
 
 ### Position: Home Row, Column 5 (SPACE position)
 
@@ -632,6 +638,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** --- (transparent)
 - **Layer 8 (LEFT_SYS):** --- (transparent)
+- **Layer 9 (RIGHT_SYS):** --- (transparent)
 
 ### Position: Bottom Row, Column 3 (C position)
 
@@ -645,6 +652,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** Mouse move down
 - **Layer 8 (LEFT_SYS):** --- (transparent)
+- **Layer 9 (RIGHT_SYS):** --- (transparent)
 
 ### Position: Bottom Row, Column 4 (D position)
 
@@ -672,6 +680,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
 - **Layer 7 (MOUSE):** --- (transparent)
 - **Layer 8 (LEFT_SYS):** --- (transparent)
+- **Layer 9 (RIGHT_SYS):** --- (transparent)
 
 ### Position: Bottom Row, Column 6 (QUOTE position)
 
