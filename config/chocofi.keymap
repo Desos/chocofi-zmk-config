@@ -32,6 +32,18 @@
             bindings = <&mo>, <&kp>;
         };
 
+        // Layer-tap with HYPER tap for navigation layers
+        lt_hyper: layer_tap_hyper {
+            compatible = "zmk,behavior-hold-tap";
+            label = "LAYER_TAP_HYPER";
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
+            flavor = "hold-preferred";
+            bindings = <&mo>, <&hyper>;
+        };
+    };
+
         // Mod-morph: comma to period with shift (ALPHA layer)
         comma_period: comma_period {
             compatible = "zmk,behavior-mod-morph";
@@ -180,162 +192,20 @@
             mods = <(MOD_RSFT)>;
         };
 
-        // Hold-tap for H_O / H_GUI on RIGHT_NAV layer
-        ho_hgui: ho_hgui {
-            compatible = "zmk,behavior-hold-tap";
-            label = "HO_HGUI";
-            #binding-cells = <2>;
-            tapping-term-ms = <200>;
-            quick-tap-ms = <200>;
-            flavor = "tap-preferred";
-            bindings = <&kp>, <&kp>;
-        };
     };
 
     macros {
-        // HYPER modifier macros (GUI+Alt+Ctrl+Shift + key)
-        h_q: h_q {
-            compatible = "zmk,behavior-macro";
-            label = "H_Q";
-            #binding-cells = <0>;
+        // HYPER modifier macro (GUI+Alt+Ctrl+Shift + key)
+        // Usage: &hyper Q, &hyper ESC, etc.
+        hyper: hyper {
+            compatible = "zmk,behavior-macro-one-param";
+            label = "HYPER";
+            #binding-cells = <1>;
+            wait-ms = <0>;
+            tap-ms = <0>;
             bindings = <&macro_press &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>,
-                       <&macro_tap &kp Q>,
-                       <&macro_release &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>;
-        };
-
-        h_a: h_a {
-            compatible = "zmk,behavior-macro";
-            label = "H_A";
-            #binding-cells = <0>;
-            bindings = <&macro_press &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>,
-                       <&macro_tap &kp A>,
-                       <&macro_release &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>;
-        };
-
-        h_s: h_s {
-            compatible = "zmk,behavior-macro";
-            label = "H_S";
-            #binding-cells = <0>;
-            bindings = <&macro_press &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>,
-                       <&macro_tap &kp S>,
-                       <&macro_release &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>;
-        };
-
-        h_w: h_w {
-            compatible = "zmk,behavior-macro";
-            label = "H_W";
-            #binding-cells = <0>;
-            bindings = <&macro_press &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>,
-                       <&macro_tap &kp W>,
-                       <&macro_release &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>;
-        };
-
-        h_n: h_n {
-            compatible = "zmk,behavior-macro";
-            label = "H_N";
-            #binding-cells = <0>;
-            bindings = <&macro_press &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>,
-                       <&macro_tap &kp N>,
-                       <&macro_release &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>;
-        };
-
-        h_e: h_e {
-            compatible = "zmk,behavior-macro";
-            label = "H_E";
-            #binding-cells = <0>;
-            bindings = <&macro_press &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>,
-                       <&macro_tap &kp E>,
-                       <&macro_release &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>;
-        };
-
-        h_i: h_i {
-            compatible = "zmk,behavior-macro";
-            label = "H_I";
-            #binding-cells = <0>;
-            bindings = <&macro_press &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>,
-                       <&macro_tap &kp I>,
-                       <&macro_release &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>;
-        };
-
-        h_o: h_o {
-            compatible = "zmk,behavior-macro";
-            label = "H_O";
-            #binding-cells = <0>;
-            bindings = <&macro_press &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>,
-                       <&macro_tap &kp O>,
-                       <&macro_release &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>;
-        };
-
-        h_h: h_h {
-            compatible = "zmk,behavior-macro";
-            label = "H_H";
-            #binding-cells = <0>;
-            bindings = <&macro_press &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>,
-                       <&macro_tap &kp H>,
-                       <&macro_release &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>;
-        };
-
-        h_g: h_g {
-            compatible = "zmk,behavior-macro";
-            label = "H_G";
-            #binding-cells = <0>;
-            bindings = <&macro_press &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>,
-                       <&macro_tap &kp G>,
-                       <&macro_release &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>;
-        };
-
-        h_j: h_j {
-            compatible = "zmk,behavior-macro";
-            label = "H_J";
-            #binding-cells = <0>;
-            bindings = <&macro_press &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>,
-                       <&macro_tap &kp J>,
-                       <&macro_release &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>;
-        };
-
-        h_gui: h_gui {
-            compatible = "zmk,behavior-macro";
-            label = "H_GUI";
-            #binding-cells = <0>;
-            bindings = <&macro_press &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>,
-                       <&macro_tap &kp LGUI>,
-                       <&macro_release &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>;
-        };
-
-        // Hyperised thumb keys
-        h_esc: h_esc {
-            compatible = "zmk,behavior-macro";
-            label = "H_ESC";
-            #binding-cells = <0>;
-            bindings = <&macro_press &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>,
-                       <&macro_tap &kp ESC>,
-                       <&macro_release &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>;
-        };
-
-        h_ret: h_ret {
-            compatible = "zmk,behavior-macro";
-            label = "H_RET";
-            #binding-cells = <0>;
-            bindings = <&macro_press &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>,
-                       <&macro_tap &kp RET>,
-                       <&macro_release &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>;
-        };
-
-        h_tab: h_tab {
-            compatible = "zmk,behavior-macro";
-            label = "H_TAB";
-            #binding-cells = <0>;
-            bindings = <&macro_press &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>,
-                       <&macro_tap &kp TAB>,
-                       <&macro_release &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>;
-        };
-
-        h_f13: h_f13 {
-            compatible = "zmk,behavior-macro";
-            label = "H_F13";
-            #binding-cells = <0>;
-            bindings = <&macro_press &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>,
-                       <&macro_tap &kp F13>,
+                       <&macro_param_1to1>,
+                       <&macro_tap &kp MACRO_PLACEHOLDER>,
                        <&macro_release &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>;
         };
 
@@ -399,10 +269,10 @@
         left_nav_layer {
             label = "LEFT_NAV";
             bindings = <
-                &h_q            &kp LEFT        &kp UP          &kp RIGHT       &kp LC(V)           &trans          &trans          &trans          &trans          &trans
-                &h_a            &kp BSPC        &h_s            &kp DEL         &kp LC(C)           &trans          &trans          &trans          &trans          &trans
+                &hyper Q        &kp LEFT        &kp UP          &kp RIGHT       &kp LC(V)           &trans          &trans          &trans          &trans          &trans
+                &hyper A        &kp BSPC        &hyper S        &kp DEL         &kp LC(C)           &trans          &trans          &trans          &trans          &trans
                 &kp PSCRN       &kp LC(Z)       &kp DOWN        &kp LC(Y)       &kp LC(X)           &trans          &trans          &trans          &trans          &trans
-                                                &trans          &trans          &trans              &sk RSHFT       &lt_hp 6 H_TAB  &lt_hp 3 H_F13
+                                                &trans          &trans          &trans              &sk RSHFT       &lt_hyper 6 TAB &lt_hyper 3 F13
             >;
         };
 
@@ -410,10 +280,10 @@
         right_nav_layer {
             label = "RIGHT_NAV";
             bindings = <
-                &trans          &trans          &trans          &trans          &trans              &kp C_VOL_UP    &kp HOME        &kp PG_UP       &kp END         &h_w
-                &trans          &trans          &trans          &trans          &trans              &kp C_VOL_DN    &h_n            &h_e            &h_i            &ho_hgui H_GUI H_O
-                &trans          &trans          &trans          &trans          &trans              &kp C_PP        &h_h            &kp PG_DN       &h_g            &h_j
-                                                &lt_hp 2 H_ESC  &lt_hp 5 H_RET  &mo 4               &trans          &trans          &trans
+                &trans          &trans          &trans          &trans          &trans              &kp C_VOL_UP    &kp HOME        &kp PG_UP       &kp END         &hyper W
+                &trans          &trans          &trans          &trans          &trans              &kp C_VOL_DN    &hyper N        &hyper E        &hyper I        &hyper O
+                &trans          &trans          &trans          &trans          &trans              &kp C_PP        &hyper H        &kp PG_DN       &hyper G        &hyper J
+                                                &lt_hyper 2 ESC &lt_hyper 5 RET &mo 4               &trans          &trans          &trans
             >;
         };
 
