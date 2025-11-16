@@ -9,6 +9,10 @@
 #include <dt-bindings/zmk/mouse.h>
 
 / {
+    chosen {
+        zmk,matrix-transform = &five_column_transform;
+    };
+
     behaviors {
         // Sticky modifier behavior for mod layers
         sticky_mod: sticky_mod {
