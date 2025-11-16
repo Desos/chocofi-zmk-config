@@ -1,6 +1,7 @@
 /*
- * Chocofi Keymap - Colemak-DH Layout
- * See zmk/docs/implementation/keymap-layout.md for complete documentation
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 #include <behaviors.dtsi>
@@ -14,349 +15,297 @@
     chosen {
         zmk,physical-layout = &foostan_corne_5col_layout;
     };
+};
 
+/ {
     behaviors {
-        // Sticky modifier behavior for mod layers
-        sticky_mod: sticky_mod {
-            compatible = "zmk,behavior-hold-tap";
-            label = "STICKY_MOD";
-            #binding-cells = <2>;
-            tapping-term-ms = <200>;
-            quick-tap-ms = <200>;
-            flavor = "tap-preferred";
-            bindings = <&kp>, <&sk>;
-        };
-
-        // Layer-tap hold-preferred for thumb keys
+        // Custom layer-tap with hold-preferred flavor
+        // Better for layer access keys - activates layer immediately when another key is pressed
         lt_hp: layer_tap_hold_preferred {
             compatible = "zmk,behavior-hold-tap";
-            label = "LAYER_TAP_HOLD_PREFERRED";
             #binding-cells = <2>;
-            tapping-term-ms = <200>;
-            quick-tap-ms = <200>;
             flavor = "hold-preferred";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <125>;
             bindings = <&mo>, <&kp>;
+            display-name = "Layer-Tap-HP";
         };
 
-        // Layer-tap with HYPER tap for navigation layers
-        lt_hyper: layer_tap_hyper {
+        // Sticky-mod on tap, regular mod on hold
+        // Tap for sticky modifier, hold for regular modifier
+        sm_ht: sticky_mod_hold_tap {
             compatible = "zmk,behavior-hold-tap";
-            label = "LAYER_TAP_HYPER";
             #binding-cells = <2>;
+            flavor = "tap-preferred";
             tapping-term-ms = <200>;
-            quick-tap-ms = <200>;
-            flavor = "hold-preferred";
-            bindings = <&mo>, <&hyper>;
+            quick-tap-ms = <125>;
+            bindings = <&kp>, <&sk>;
+            display-name = "Sticky-Mod-HT";
         };
 
-        // Mod-morph: comma to period with shift (ALPHA layer)
-        comma_period: comma_period {
+        // Mod-morph behaviors for RSFT key overrides
+        // RSFT + number keys -> F-keys
+        mm_1: mm_1 {
             compatible = "zmk,behavior-mod-morph";
-            label = "COMMA_PERIOD";
-            #binding-cells = <0>;
-            bindings = <&kp COMMA>, <&kp PERIOD>;
-            mods = <(MOD_LSFT|MOD_RSFT)>;
-        };
-
-        // NUMER layer mod-morphs - only respond to RSFT
-        // Numbers to function keys
-        num_1_f1: num_1_f1 {
-            compatible = "zmk,behavior-mod-morph";
-            label = "NUM_1_F1";
+            label = "MM_1";
             #binding-cells = <0>;
             bindings = <&kp N1>, <&kp F1>;
             mods = <(MOD_RSFT)>;
         };
 
-        num_2_f2: num_2_f2 {
+        mm_2: mm_2 {
             compatible = "zmk,behavior-mod-morph";
-            label = "NUM_2_F2";
+            label = "MM_2";
             #binding-cells = <0>;
             bindings = <&kp N2>, <&kp F2>;
             mods = <(MOD_RSFT)>;
         };
 
-        num_3_f3: num_3_f3 {
+        mm_3: mm_3 {
             compatible = "zmk,behavior-mod-morph";
-            label = "NUM_3_F3";
+            label = "MM_3";
             #binding-cells = <0>;
             bindings = <&kp N3>, <&kp F3>;
             mods = <(MOD_RSFT)>;
         };
 
-        num_4_f4: num_4_f4 {
+        mm_4: mm_4 {
             compatible = "zmk,behavior-mod-morph";
-            label = "NUM_4_F4";
+            label = "MM_4";
             #binding-cells = <0>;
             bindings = <&kp N4>, <&kp F4>;
             mods = <(MOD_RSFT)>;
         };
 
-        num_5_f5: num_5_f5 {
+        mm_5: mm_5 {
             compatible = "zmk,behavior-mod-morph";
-            label = "NUM_5_F5";
+            label = "MM_5";
             #binding-cells = <0>;
             bindings = <&kp N5>, <&kp F5>;
             mods = <(MOD_RSFT)>;
         };
 
-        num_6_f6: num_6_f6 {
+        mm_6: mm_6 {
             compatible = "zmk,behavior-mod-morph";
-            label = "NUM_6_F6";
+            label = "MM_6";
             #binding-cells = <0>;
             bindings = <&kp N6>, <&kp F6>;
             mods = <(MOD_RSFT)>;
         };
 
-        num_7_f7: num_7_f7 {
+        mm_7: mm_7 {
             compatible = "zmk,behavior-mod-morph";
-            label = "NUM_7_F7";
+            label = "MM_7";
             #binding-cells = <0>;
             bindings = <&kp N7>, <&kp F7>;
             mods = <(MOD_RSFT)>;
         };
 
-        num_8_f8: num_8_f8 {
+        mm_8: mm_8 {
             compatible = "zmk,behavior-mod-morph";
-            label = "NUM_8_F8";
+            label = "MM_8";
             #binding-cells = <0>;
             bindings = <&kp N8>, <&kp F8>;
             mods = <(MOD_RSFT)>;
         };
 
-        num_9_f9: num_9_f9 {
+        mm_9: mm_9 {
             compatible = "zmk,behavior-mod-morph";
-            label = "NUM_9_F9";
+            label = "MM_9";
             #binding-cells = <0>;
             bindings = <&kp N9>, <&kp F9>;
             mods = <(MOD_RSFT)>;
         };
 
-        num_0_f10: num_0_f10 {
+        mm_0: mm_0 {
             compatible = "zmk,behavior-mod-morph";
-            label = "NUM_0_F10";
+            label = "MM_0";
             #binding-cells = <0>;
             bindings = <&kp N0>, <&kp F10>;
             mods = <(MOD_RSFT)>;
         };
 
-        // Symbol remappings with RSFT
-        excl_qmark: excl_qmark {
+        // RSFT + symbols -> alternative symbols
+        mm_slsh: mm_slsh {
             compatible = "zmk,behavior-mod-morph";
-            label = "EXCL_QMARK";
+            label = "MM_SLSH";
             #binding-cells = <0>;
-            bindings = <&kp EXCL>, <&kp QMARK>;
+            bindings = <&kp SLASH>, <&kp QMARK>;
             mods = <(MOD_RSFT)>;
         };
 
-        slash_bslh: slash_bslh {
+        mm_comm: mm_comm {
             compatible = "zmk,behavior-mod-morph";
-            label = "SLASH_BSLH";
+            label = "MM_COMM";
             #binding-cells = <0>;
-            bindings = <&kp SLASH>, <&kp BSLH>;
+            bindings = <&kp COMMA>, <&kp DOT>;
             mods = <(MOD_RSFT)>;
         };
 
-        lt_gt: lt_gt {
+        mm_lt: mm_lt {
             compatible = "zmk,behavior-mod-morph";
-            label = "LT_GT";
+            label = "MM_LT";
             #binding-cells = <0>;
             bindings = <&kp LT>, <&kp GT>;
             mods = <(MOD_RSFT)>;
         };
 
-        lpar_rpar: lpar_rpar {
+        mm_lpar: mm_lpar {
             compatible = "zmk,behavior-mod-morph";
-            label = "LPAR_RPAR";
+            label = "MM_LPAR";
             #binding-cells = <0>;
             bindings = <&kp LPAR>, <&kp RPAR>;
             mods = <(MOD_RSFT)>;
         };
 
-        lbkt_rbkt: lbkt_rbkt {
+        mm_lbrc: mm_lbrc {
             compatible = "zmk,behavior-mod-morph";
-            label = "LBKT_RBKT";
-            #binding-cells = <0>;
-            bindings = <&kp LBKT>, <&kp RBKT>;
-            mods = <(MOD_RSFT)>;
-        };
-
-        lbrc_rbrc: lbrc_rbrc {
-            compatible = "zmk,behavior-mod-morph";
-            label = "LBRC_RBRC";
+            label = "MM_LBRC";
             #binding-cells = <0>;
             bindings = <&kp LBRC>, <&kp RBRC>;
             mods = <(MOD_RSFT)>;
         };
 
-        equal_grave: equal_grave {
+        mm_lbkt: mm_lbkt {
             compatible = "zmk,behavior-mod-morph";
-            label = "EQUAL_GRAVE";
+            label = "MM_LBKT";
             #binding-cells = <0>;
-            bindings = <&kp EQUAL>, <&kp GRAVE>;
+            bindings = <&kp LBKT>, <&kp RBKT>;
             mods = <(MOD_RSFT)>;
         };
 
-    };
-
-    macros {
-        // HYPER modifier macro (GUI+Alt+Ctrl+Shift + key)
-        // Usage: &hyper Q, &hyper ESC, etc.
-        hyper: hyper {
-            compatible = "zmk,behavior-macro-one-param";
-            label = "HYPER";
-            #binding-cells = <1>;
-            wait-ms = <0>;
-            tap-ms = <0>;
-            bindings =
-                <&macro_press &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>
-                , <&macro_param_1to1>
-                , <&macro_tap &kp MACRO_PLACEHOLDER>
-                , <&macro_release &kp LGUI &kp LALT &kp LCTRL &kp LSHFT>
-                ;
+        mm_eq: mm_eq {
+            compatible = "zmk,behavior-mod-morph";
+            label = "MM_EQ";
+            #binding-cells = <0>;
+            bindings = <&kp EQUAL>, <&kp PLUS>;
+            mods = <(MOD_RSFT)>;
         };
 
-        // REISUB macro for Linux emergency reboot
-        reisub: reisub {
-            compatible = "zmk,behavior-macro";
-            label = "REISUB";
+        mm_excl: mm_excl {
+            compatible = "zmk,behavior-mod-morph";
+            label = "MM_EXCL";
             #binding-cells = <0>;
-            bindings = <&macro_tap &kp LA(SYSREQ) &kp R &kp E &kp I &kp S &kp U &kp B>;
+            bindings = <&kp EXCL>, <&kp QMARK>;
+            mods = <(MOD_RSFT)>;
         };
     };
 
     conditional_layers {
         compatible = "zmk,conditional-layers";
         
-        // Layer 7: MOUSE (LEFT_NAV + RIGHT_NAV)
+        // Activate mouse layer when both LEFT_NAV and RIGHT_NAV are active
         mouse_layer {
-            if-layers = <2 3>;
-            then-layer = <7>;
+            if-layers = <2 3>;  // LEFT_NAV + RIGHT_NAV
+            then-layer = <7>;   // MOUSE layer
         };
-
-        // Layer 8: LEFT_SYS (LEFT_NAV + LEFT_MODS)
-        left_sys_layer {
-            if-layers = <2 5>;
-            then-layer = <8>;
-        };
-
-        // Layer 9: RIGHT_SYS (RIGHT_NAV + RIGHT_MODS)
-        right_sys_layer {
-            if-layers = <3 6>;
-            then-layer = <9>;
+        
+        // Activate system/BT layer when both LEFT_NAV and LEFT_MODS are active
+        system_layer {
+            if-layers = <2 5>;  // LEFT_NAV + LEFT_MODS
+            then-layer = <8>;   // SYSTEM layer
         };
     };
 
     keymap {
         compatible = "zmk,keymap";
 
-        // Layer 0: ALPHA (Colemak-DH)
+        // Layer 0: ALPHA (Base layer - Colemak-DH variant)
         alpha_layer {
             label = "ALPHA";
             bindings = <
-                &kp Q           &kp K           &kp F           &kp P           &kp B               &kp SEMI        &kp L           &kp U           &kp Y           &kp W
-                &kp A           &kp R           &kp S           &kp T           &kp SPACE           &comma_period   &kp N           &kp E           &kp I           &kp O
-                &kp Z           &kp X           &kp C           &kp D           &kp V               &kp SQT         &kp H           &kp M           &kp G           &kp J
-                                                &lt_hp 2 ESC    &lt_hp 5 RET    &sl 4               &sk RSHFT       &lt_hp 6 TAB    &lt_hp 3 F13
+                &kp Q        &kp K        &kp F        &kp P        &kp B            &kp SEMI     &kp L        &kp U        &kp Y        &kp W
+                &kp A        &kp R        &kp S        &kp T        &kp SPACE        &mm_comm     &kp N        &kp E        &kp I        &kp O
+                &kp Z        &kp X        &kp C        &kp D        &kp V            &kp SQT      &kp H        &kp M        &kp G        &kp J
+                             &lt_hp 2 ESC    &lt_hp 5 RET    &sl 4                         &sk RSHIFT   &lt_hp 6 TAB    &lt_hp 3 F12
             >;
         };
 
-        // Layer 1: WASD (Gaming)
+        // Layer 1: WASD (Gaming layer)
         wasd_layer {
             label = "WASD";
             bindings = <
-                &kp N1          &kp N2          &kp N3          &kp N4          &kp N5              &trans          &trans          &trans          &trans          &trans
-                &kp LSHFT       &kp Q           &kp W           &kp E           &kp R               &trans          &trans          &trans          &trans          &trans
-                &kp LCTRL       &kp A           &kp S           &kp D           &kp F               &trans          &trans          &trans          &trans          &trans
-                                                &kp TAB         &kp Z           &kp SPACE           &trans          &mo 3           &mo 2
+                &kp N1       &kp N2       &kp N3       &kp N4       &kp N5           &trans       &trans       &trans       &trans       &trans
+                &kp LSHIFT   &kp Q        &kp W        &kp E        &kp R            &trans       &trans       &trans       &trans       &trans
+                &kp LCTRL    &kp A        &kp S        &kp D        &kp F            &trans       &trans       &trans       &trans       &trans
+                             &kp TAB      &kp Z        &kp SPACE                     &trans       &mo 3        &mo 2
             >;
         };
 
         // Layer 2: LEFT_NAV
         left_nav_layer {
-            label = "LEFT_NAV";
+            label = "L_NAV";
             bindings = <
-                &hyper Q        &kp LEFT        &kp UP          &kp RIGHT       &kp LC(V)           &trans          &trans          &trans          &trans          &trans
-                &hyper A        &kp BSPC        &hyper S        &kp DEL         &kp LC(C)           &trans          &trans          &trans          &trans          &trans
-                &kp PSCRN       &kp LC(Z)       &kp DOWN        &kp LC(Y)       &kp LC(X)           &trans          &trans          &trans          &trans          &trans
-                                                &trans          &trans          &trans              &sk RSHFT       &lt_hyper 6 TAB &lt_hyper 3 F13
+                &kp LCTRL    &kp LEFT     &kp UP       &kp RIGHT    &kp LC(V)        &trans       &trans       &trans       &trans       &trans
+                &kp LGUI     &kp BSPC     &kp LSHIFT   &kp DEL      &kp LC(C)        &trans       &trans       &trans       &trans       &trans
+                &kp LG(LA(LC(LSHIFT)))  &kp LC(Z)  &kp DOWN  &kp LC(Y)  &kp LC(X)     &trans       &trans       &trans       &trans       &trans
+                             &trans       &trans       &trans                        &trans       &trans       &trans
             >;
         };
 
         // Layer 3: RIGHT_NAV
         right_nav_layer {
-            label = "RIGHT_NAV";
+            label = "R_NAV";
             bindings = <
-                &trans          &trans          &trans          &trans          &trans              &kp C_VOL_UP    &kp HOME        &kp PG_UP       &kp END         &hyper W
-                &trans          &trans          &trans          &trans          &trans              &kp C_VOL_DN    &hyper N        &hyper E        &hyper I        &hyper O
-                &trans          &trans          &trans          &trans          &trans              &kp C_PP        &hyper H        &kp PG_DN       &hyper G        &hyper J
-                                                &lt_hyper 2 ESC &lt_hyper 5 RET &mo 4               &trans          &trans          &trans
+                &trans       &trans       &trans       &trans       &trans           &kp C_VOL_UP &kp HOME     &kp PG_UP    &kp END      &tog 1
+                &trans       &trans       &trans       &trans       &trans           &kp C_VOL_DN &kp C_PREV   &mt LSHIFT K_APP  &kp C_NEXT  &kp C_MUTE
+                &trans       &trans       &trans       &trans       &trans           &kp C_PP     &kp BSPC     &kp PG_DN    &kp DEL      &kp PSCRN
+                             &trans       &trans       &trans                        &trans       &trans       &trans
             >;
         };
 
-        // Layer 4: NUMER
+        // Layer 4: NUMER (Numbers and symbols)
         numer_layer {
             label = "NUMER";
             bindings = <
-                &kp CARET       &num_1_f1       &num_2_f2       &num_3_f3       &kp DOT             &excl_qmark     &kp AT          &kp DLLR        &kp HASH        &kp PIPE
-                &kp STAR        &num_4_f4       &num_5_f5       &num_6_f6       &kp MINUS           &slash_bslh     &lt_gt          &lpar_rpar      &lbkt_rbkt      &lbrc_rbrc
-                &kp PLUS        &num_7_f7       &num_8_f8       &num_9_f9       &num_0_f10          &equal_grave    &kp AMPS        &kp TILDE       &kp UNDER       &kp PRCNT
-                                                &trans          &trans          &trans              &kp LS(TAB)     &kp LS(F12)     &trans
+                &kp CARET    &mm_1        &mm_2        &mm_3        &kp DOT          &mm_excl     &kp AT       &kp DLLR     &kp HASH     &kp PIPE
+                &kp ASTRK    &mm_4        &mm_5        &mm_6        &kp MINUS        &mm_slsh     &mm_lt       &mm_lpar     &mm_lbkt     &mm_lbrc
+                &kp PLUS     &mm_7        &mm_8        &mm_9        &mm_0            &mm_eq       &kp AMPS     &kp TILDE    &kp UNDER    &kp PRCNT
+                             &trans       &trans       &trans                        &trans       &kp LS(TAB)  &kp LS(F12)
             >;
         };
 
         // Layer 5: LEFT_MODS
         left_mods_layer {
-            label = "LEFT_MODS";
+            label = "L_MODS";
             bindings = <
-                &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &tog 1
-                &sticky_mod LGUI LGUI  &sticky_mod LALT LALT  &sticky_mod LSHFT LSHFT  &sticky_mod LCTRL LCTRL  &trans    &trans          &trans          &trans          &trans          &trans
-                &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
-                                                &trans          &trans          &trans              &trans          &trans          &trans
+                &trans       &trans       &trans       &trans       &trans           &trans       &trans       &trans       &trans       &tog 1
+                &sm_ht LGUI LGUI   &sm_ht LALT LALT   &sm_ht LSHIFT LSHIFT &sm_ht LCTRL LCTRL  &trans           &trans       &trans       &trans       &trans       &trans
+                &trans       &trans       &trans       &trans       &trans           &trans       &trans       &trans       &trans       &trans
+                             &trans       &trans       &trans                        &trans       &trans       &trans
             >;
         };
 
         // Layer 6: RIGHT_MODS
         right_mods_layer {
-            label = "RIGHT_MODS";
+            label = "R_MODS";
             bindings = <
-                &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &tog 1
-                &trans          &trans          &trans          &trans          &trans              &trans          &sticky_mod RCTRL RCTRL  &sticky_mod RSHFT RSHFT  &sticky_mod RALT RALT  &sticky_mod RGUI RGUI
-                &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
-                                                &trans          &trans          &trans              &trans          &trans          &trans
+                &trans       &trans       &trans       &trans       &trans           &trans       &trans       &trans       &trans       &tog 1
+                &trans       &trans       &trans       &trans       &trans           &trans       &sm_ht LCTRL LCTRL  &sm_ht LSHIFT LSHIFT &sm_ht LALT LALT   &sm_ht LGUI LGUI
+                &trans       &trans       &trans       &trans       &trans           &trans       &trans       &trans       &trans       &trans
+                             &trans       &trans       &trans                        &trans       &trans       &trans
             >;
         };
 
-        // Layer 7: MOUSE
-        mouse_layer {
+        // Layer 7: UP_NAV (Mouse navigation)
+        up_nav_layer {
             label = "MOUSE";
             bindings = <
-                &trans          &mmv MOVE_LEFT  &mmv MOVE_UP    &mmv MOVE_RIGHT &trans              &trans          &msc SCRL_LEFT  &msc SCRL_UP    &msc SCRL_RIGHT &trans
-                &trans          &trans          &trans          &trans          &trans              &trans          &mkp LCLK       &mkp MCLK       &mkp RCLK       &trans
-                &trans          &trans          &mmv MOVE_DOWN  &trans          &trans              &trans          &trans          &msc SCRL_DOWN  &trans          &trans
-                                                &trans          &trans          &trans              &trans          &trans          &trans
+                &trans       &mmv MOVE_LEFT  &mmv MOVE_UP    &mmv MOVE_RIGHT  &trans           &trans       &mkp LCLK    &mkp MCLK    &mkp RCLK    &trans
+                &kp LGUI     &kp LALT        &kp LSHIFT      &kp LCTRL        &trans           &trans       &kp LCTRL    &kp LSHIFT   &kp LALT     &kp LGUI
+                &trans       &trans          &mmv MOVE_DOWN  &trans           &trans           &trans       &trans       &trans       &trans       &trans
+                             &trans       &trans       &trans                        &trans       &trans       &trans
             >;
         };
 
-        // Layer 8: LEFT_SYS
-        left_sys_layer {
-            label = "LEFT_SYS";
+        // Layer 8: SYSTEM/BT (Bluetooth and system controls - left hand only)
+        system_layer {
+            label = "SYSTEM";
             bindings = <
-                &bt BT_SEL 0    &bt BT_SEL 1    &bt BT_SEL 2    &bt BT_SEL 3    &bt BT_SEL 4        &trans          &trans          &trans          &trans          &trans
-                &sys_reset      &bootloader     &studio_unlock  &trans          &bt BT_CLR          &trans          &trans          &trans          &trans          &trans
-                &trans          &trans          &trans          &reisub         &trans              &trans          &trans          &trans          &trans          &trans
-                                                &trans          &trans          &trans              &trans          &trans          &trans
-            >;
-        };
-
-        // Layer 9: RIGHT_SYS
-        right_sys_layer {
-            label = "RIGHT_SYS";
-            bindings = <
-                &trans          &trans          &trans          &trans          &trans              &bt BT_SEL 4    &bt BT_SEL 3    &bt BT_SEL 2    &bt BT_SEL 1    &bt BT_SEL 0
-                &trans          &trans          &trans          &trans          &trans              &bt BT_CLR      &trans          &studio_unlock  &bootloader     &sys_reset
-                &trans          &trans          &trans          &trans          &trans              &trans          &reisub         &trans          &trans          &tog 1
-                                                &trans          &trans          &trans              &trans          &trans          &trans
+                &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4     &trans       &trans       &trans       &trans       &trans
+                &sys_reset   &bootloader  &studio_unlock &trans     &trans           &trans       &trans       &trans       &trans       &trans
+                &trans       &trans       &trans       &trans       &bt BT_CLR       &trans       &trans       &trans       &trans       &trans
+                             &trans       &trans       &trans                        &trans       &trans       &trans
             >;
         };
     };
