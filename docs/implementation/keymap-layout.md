@@ -29,8 +29,8 @@ This allows quick access to both number/symbol sets and function keys without ne
 
 - **Layer 0:** ALPHA - Base typing layer (Colemak-DH)
 - **Layer 1:** WASD - Gaming layer
-- **Layer 2:** LEFT_NAV - Left-hand navigation with HYPER keys
-- **Layer 3:** RIGHT_NAV - Right-hand media and navigation with HYPER keys
+- **Layer 2:** LEFT_NAV - Left-hand navigation with mnemonic HYPER keys (H_Q, H_A, H_S) + cross-hand thumb hyperised keys (H_TAB, H_F13)
+- **Layer 3:** RIGHT_NAV - Right-hand media/navigation with mnemonic HYPER keys (H_W, H_N, H_E, H_I, H_H, H_G, H_J) + cross-hand thumb hyperised keys (H_ESC, H_RET)
 - **Layer 4:** NUMER - Numbers and symbols
 - **Layer 4+RSFT:** NUMER with custom RSFT remapping (alternate symbol set)
 - **Layer 5:** LEFT_MODS - Left-hand modifiers
@@ -59,7 +59,7 @@ Z       X       C       D       V
 ;       L       U       Y       W
 ,/.     N       E       I       O
 '       H       M       G       J
-RSHIFT  TAB     F12
+RSHIFT  TAB     F13
         (L6)    (L3)
 ```
 
@@ -100,8 +100,8 @@ CTRL    A       S       D       F
 
 **Left Hand:**
 ```
-H_ESC  LEFT    UP      RIGHT   PASTE
-H_GUI  BSPC    H_RET   DEL     COPY
+H_Q    LEFT    UP      RIGHT   PASTE
+H_A    BSPC    H_S     DEL     COPY
 PrScr  UNDO    DOWN    REDO    CUT
         ---     ---     ---
 ```
@@ -111,16 +111,16 @@ PrScr  UNDO    DOWN    REDO    CUT
 ---     ---     ---     ---     ---
 ---     ---     ---     ---     ---
 ---     ---     ---     ---     ---
----     ---     ---
+RSHIFT  H_TAB   H_F13
+        (L6)    (L3)
 ```
 
 **Notes:**
-- H_, HYPER = GUI+Alt+Ctrl+Shift (all modifiers)
-- PASTE = Ctrl+V
-- COPY = Ctrl+C
-- CUT = Ctrl+X
-- UNDO = Ctrl+Z
-- REDO = Ctrl+Y
+- H_ prefix = HYPER modifier (GUI+Alt+Ctrl+Shift) combined with key
+- Hyperised keys follow mnemonic pattern: H_Q, H_A, H_S (HYPER + alpha key at that position)
+- Right thumb keys become hyperised when LEFT_NAV is held: H_TAB, H_F13
+- PASTE = Ctrl+V, COPY = Ctrl+C, CUT = Ctrl+X
+- UNDO = Ctrl+Z, REDO = Ctrl+Y
 
 ---
 
@@ -131,23 +131,25 @@ PrScr  UNDO    DOWN    REDO    CUT
 ---     ---     ---     ---     ---
 ---     ---     ---     ---     ---
 ---     ---     ---     ---     ---
----     ---     ---
+H_ESC   H_RET   NUMER
+(L2)    (L5)    (L4)
 ```
 
 **Right Hand:**
 ```
-VOL+    HOME    PG_UP   END     H_RETURN
-VOL-    PREV    H_F12   NEXT    MUTE
-PLAY    H_LEFT  PG_DN   H_RIGHT H_TAB
+VOL+    HOME    PG_UP   END     H_W
+VOL-    H_N     H_E     H_I     MUTE/H_GUI
+PLAY    H_H     PG_DN   H_G     H_J
 ---     ---     ---
 ```
 
 **Notes:**
 - H_ prefix = HYPER modifier (GUI+Alt+Ctrl+Shift) combined with key
-- H_RETURN, H_F12, H_LEFT, H_RIGHT, H_TAB = HYPER + respective key
-- Media controls: PREV/NEXT track, PLAY/PAUSE, VOL+/-, MUTE
+- Hyperised keys follow mnemonic pattern: H_W, H_N, H_E, H_I, H_H, H_G, H_J (HYPER + alpha key at that position)
+- O position: MUTE (tap) / H_GUI (hold) - provides H_GUI access from right hand
+- Left thumb keys become hyperised when RIGHT_NAV is held: H_ESC, H_RET
+- Media controls: PLAY/PAUSE, VOL+/-, MUTE
 - Navigation: HOME, END, PG_UP, PG_DN
-- HYPER keys allow triggering complex shortcuts with single keypresses
 
 ---
 
@@ -345,7 +347,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 
 - **Layer 0 (ALPHA):** Q
 - **Layer 1 (WASD):** 1
-- **Layer 2 (LEFT_NAV):** H_ESC (HYPER + Escape)
+- **Layer 2 (LEFT_NAV):** H_Q (HYPER + Q)
 - **Layer 3 (RIGHT_NAV):** --- (transparent)
 - **Layer 4 (NUMER):** ^ (caret)
 - **Layer 5 (LEFT_MODS):** --- (transparent)
@@ -467,7 +469,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 - **Layer 0 (ALPHA):** W
 - **Layer 1 (WASD):** --- (transparent)
 - **Layer 2 (LEFT_NAV):** --- (transparent)
-- **Layer 3 (RIGHT_NAV):** Toggle Layer 1 (WASD/Gaming)
+- **Layer 3 (RIGHT_NAV):** H_W (HYPER + W)
 - **Layer 4 (NUMER):** | (pipe)
 - **Layer 5 (LEFT_MODS):** Toggle Layer 1 (WASD/Gaming)
 - **Layer 6 (RIGHT_MODS):** Toggle Layer 1 (WASD/Gaming)
@@ -479,7 +481,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 
 - **Layer 0 (ALPHA):** A
 - **Layer 1 (WASD):** Left Shift
-- **Layer 2 (LEFT_NAV):** H_GUI (HYPER + GUI)
+- **Layer 2 (LEFT_NAV):** H_A (HYPER + A)
 - **Layer 3 (RIGHT_NAV):** --- (transparent)
 - **Layer 4 (NUMER):** * (asterisk)
 - **Layer 5 (LEFT_MODS):** GUI (tap: sticky, hold: regular)
@@ -506,7 +508,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 
 - **Layer 0 (ALPHA):** S
 - **Layer 1 (WASD):** W
-- **Layer 2 (LEFT_NAV):** H_RET (HYPER + Return)
+- **Layer 2 (LEFT_NAV):** H_S (HYPER + S)
 - **Layer 3 (RIGHT_NAV):** --- (transparent)
 - **Layer 4 (NUMER):** 5
 - **Layer 4+RSFT:** F5
@@ -562,7 +564,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 - **Layer 0 (ALPHA):** N
 - **Layer 1 (WASD):** --- (transparent)
 - **Layer 2 (LEFT_NAV):** --- (transparent)
-- **Layer 3 (RIGHT_NAV):** Previous track
+- **Layer 3 (RIGHT_NAV):** H_N (HYPER + N)
 - **Layer 4 (NUMER):** < (less than)
 - **Layer 4+RSFT:** > (greater than)
 - **Layer 5 (LEFT_MODS):** --- (transparent)
@@ -576,7 +578,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 - **Layer 0 (ALPHA):** E
 - **Layer 1 (WASD):** --- (transparent)
 - **Layer 2 (LEFT_NAV):** --- (transparent)
-- **Layer 3 (RIGHT_NAV):** K_APP (application/menu key with SHIFT mod-tap)
+- **Layer 3 (RIGHT_NAV):** H_E (HYPER + E)
 - **Layer 4 (NUMER):** ( (left paren)
 - **Layer 4+RSFT:** ) (right paren)
 - **Layer 5 (LEFT_MODS):** --- (transparent)
@@ -590,7 +592,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 - **Layer 0 (ALPHA):** I
 - **Layer 1 (WASD):** --- (transparent)
 - **Layer 2 (LEFT_NAV):** --- (transparent)
-- **Layer 3 (RIGHT_NAV):** Next track
+- **Layer 3 (RIGHT_NAV):** H_I (HYPER + I)
 - **Layer 4 (NUMER):** [ (left bracket)
 - **Layer 4+RSFT:** ] (right bracket)
 - **Layer 5 (LEFT_MODS):** --- (transparent)
@@ -604,7 +606,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 - **Layer 0 (ALPHA):** O
 - **Layer 1 (WASD):** --- (transparent)
 - **Layer 2 (LEFT_NAV):** --- (transparent)
-- **Layer 3 (RIGHT_NAV):** Mute
+- **Layer 3 (RIGHT_NAV):** Mute (tap) / H_GUI (hold)
 - **Layer 4 (NUMER):** { (left brace)
 - **Layer 4+RSFT:** } (right brace)
 - **Layer 5 (LEFT_MODS):** --- (transparent)
@@ -701,7 +703,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 - **Layer 0 (ALPHA):** H
 - **Layer 1 (WASD):** --- (transparent)
 - **Layer 2 (LEFT_NAV):** --- (transparent)
-- **Layer 3 (RIGHT_NAV):** Backspace
+- **Layer 3 (RIGHT_NAV):** H_H (HYPER + H)
 - **Layer 4 (NUMER):** & (ampersand)
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
@@ -727,7 +729,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 - **Layer 0 (ALPHA):** G
 - **Layer 1 (WASD):** --- (transparent)
 - **Layer 2 (LEFT_NAV):** --- (transparent)
-- **Layer 3 (RIGHT_NAV):** Delete
+- **Layer 3 (RIGHT_NAV):** H_G (HYPER + G)
 - **Layer 4 (NUMER):** _ (underscore)
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
@@ -740,7 +742,7 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 - **Layer 0 (ALPHA):** J
 - **Layer 1 (WASD):** --- (transparent)
 - **Layer 2 (LEFT_NAV):** --- (transparent)
-- **Layer 3 (RIGHT_NAV):** Print Screen
+- **Layer 3 (RIGHT_NAV):** H_J (HYPER + J)
 - **Layer 4 (NUMER):** % (percent)
 - **Layer 5 (LEFT_MODS):** --- (transparent)
 - **Layer 6 (RIGHT_MODS):** --- (transparent)
@@ -752,12 +754,14 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 
 - **Layer 0 (ALPHA):** ESC (tap) / Layer 2 (hold)
 - **Layer 1 (WASD):** TAB
+- **Layer 3 (RIGHT_NAV):** H_ESC (tap) / Layer 2 (hold)
 - **All other layers:** --- (transparent)
 
 ### Position: Thumb Row, Left 2 (RET position)
 
 - **Layer 0 (ALPHA):** RET/Enter (tap) / Layer 5 (hold)
 - **Layer 1 (WASD):** Z
+- **Layer 3 (RIGHT_NAV):** H_RET (tap) / Layer 5 (hold)
 - **All other layers:** --- (transparent)
 
 ### Position: Thumb Row, Left 3 (NUMER position)
@@ -775,12 +779,14 @@ BT_CLR  ---     STUDIO  BOOT    RESET
 
 - **Layer 0 (ALPHA):** TAB (tap) / Layer 6 (hold)
 - **Layer 1 (WASD):** Momentary Layer 3
+- **Layer 2 (LEFT_NAV):** H_TAB (tap) / Layer 6 (hold)
 - **All other layers:** --- (transparent)
 
-### Position: Thumb Row, Right 3 (F12 position)
+### Position: Thumb Row, Right 3 (F13 position)
 
-- **Layer 0 (ALPHA):** F12 (tap) / Layer 3 (hold)
+- **Layer 0 (ALPHA):** F13 (tap) / Layer 3 (hold)
 - **Layer 1 (WASD):** Momentary Layer 2
+- **Layer 2 (LEFT_NAV):** H_F13 (tap) / Layer 3 (hold)
 - **All other layers:** --- (transparent)
 
 ---
