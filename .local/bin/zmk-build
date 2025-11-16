@@ -62,13 +62,9 @@ build_side() {
     local build_dir="build/$side"
     local shield_name="${SHIELD}_${side}"
     
-    # Add Studio snippet only for left side
+    # Explicitly specify keymap file for both halves
     local snippet_args=""
-    local cmake_args="-DZMK_CONFIG=/workspaces/zmk-config"
-    if [ "$side" = "left" ]; then
-        snippet_args="-S studio-rpc-usb-uart"
-        cmake_args="$cmake_args -DCONFIG_ZMK_STUDIO=y"
-    fi
+    local cmake_args="-DZMK_CONFIG=/workspaces/zmk-config -DKEYMAP_FILE=/workspaces/zmk-config/chocofi.keymap"
     
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "Building Chocofi - ${side^^} Half"
@@ -76,7 +72,7 @@ build_side() {
     echo "  Board:      $BOARD"
     echo "  Shield:     $shield_name"
     echo "  Build dir:  $build_dir"
-    echo "  Studio:     $([ "$side" = "left" ] && echo "ENABLED" || echo "disabled")"
+    echo "  Keymap:     chocofi.keymap"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
     
