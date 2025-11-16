@@ -41,32 +41,37 @@ mount_point=$(echo "$mount_output" | grep -oP 'at \K.*' | tr -d '\n')
 **Fallback:**
 If udisksctl is not available, users can use the manual method with `sudo mount`.
 
-#### 2. Device Detection: udevadm monitor
+#### 2. Device Detection: Polling
 
-**Why udevadm monitor over polling?**
-- Instant detection when device appears (no polling delay)
-- No race conditions
-- More efficient (event-driven vs. polling)
-- Built into systemd (always available)
-- Can filter for specific device types
+**Why polling over udevadm monitor?**
+- Simpler and more reliable
+- No dependency on udev event format
+- No race conditions (monitor starts before device is plugged in)
+- Works consistently across different systems
+- Fast enough (0.5 second polling interval)
 
 **Implementation:**
 ```bash
-# Watch for block device add events, filter for sda, timeout after 60s
-timeout 60s udevadm monitor --udev --subsystem-match=block | \
-    grep --line-buffered "add.*sda" | \
-    head -n1
+# Poll for device appearance every 0.5 seconds
+while [ $elapsed -lt $((DEVICE_WAIT_TIMEOUT * 2)) ]; do
+    if [ -e "$DEVICE" ]; then
+        sleep 1  # Give device a moment to settle
+        echo "✓ Device detected!"
+        return 0
+    fi
+    sleep 0.5
+    ((elapsed++))
+done
 ```
 
 **Why this works:**
-- `udevadm monitor` streams device events in real-time
-- `--subsystem-match=block` filters for block devices only
-- `grep --line-buffered` ensures immediate output
-- `head -n1` exits after first match
-- `timeout` prevents infinite waiting
+- Checks for `/dev/sda` existence every 0.5 seconds
+- Simple and predictable
+- No pattern matching or event parsing needed
+- Timeout protection (60 seconds default)
 
 **Alternative considered:**
-Polling `/dev/sda` existence every 0.5 seconds was simpler but less robust and wastes CPU cycles.
+`udevadm monitor` was initially implemented but proved unreliable due to timing issues and event format variations across systems.
 
 #### 3. Device Removal Detection: Polling
 
@@ -253,11 +258,10 @@ Possible improvements:
 
 - `bash` - Shell interpreter
 - `udisksctl` - From udisks2 package, for mounting without sudo
-- `udevadm` - From systemd, for device detection
 - `grep` - For parsing output
 - `stat` - For file size verification
-- `timeout` - For limiting wait times
 - `sync` - For flushing writes
+- `sleep` - For polling delays
 
 ### Optional
 

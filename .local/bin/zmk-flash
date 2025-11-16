@@ -48,11 +48,6 @@ check_dependencies() {
         echo "Install udisks2 package or use manual flashing method"
         exit 1
     fi
-    
-    if ! command -v udevadm &> /dev/null; then
-        echo "Error: udevadm not found (should be part of systemd)"
-        exit 1
-    fi
 }
 
 check_firmware_exists() {
@@ -75,6 +70,7 @@ check_firmware_exists() {
 # Wait for device to appear
 wait_for_device() {
     local side=$1
+    local elapsed=0
     
     echo "⏳ Waiting for ${side^^} half in bootloader mode..."
     echo "   (Double-tap reset button on the keyboard half)"
@@ -88,31 +84,22 @@ wait_for_device() {
         return 1
     fi
     
-    # Use udevadm monitor to watch for device
-    # This is more robust than polling
-    local detected=false
+    # Poll for device appearance (checking every 0.5 seconds)
+    # This is simpler and more reliable than udevadm monitor
+    while [ $elapsed -lt $((DEVICE_WAIT_TIMEOUT * 2)) ]; do
+        if [ -e "$DEVICE" ]; then
+            # Give device a moment to settle
+            sleep 1
+            echo "✓ Device detected!"
+            return 0
+        fi
+        sleep 0.5
+        ((elapsed++))
+    done
     
-    # Start monitoring in background, filter for sda add events
-    timeout "${DEVICE_WAIT_TIMEOUT}s" udevadm monitor --udev --subsystem-match=block 2>/dev/null | \
-        grep --line-buffered "add.*sda" | \
-        head -n1 &> /dev/null && detected=true || detected=false
-    
-    if [ "$detected" = false ]; then
-        echo "✗ Timeout: Device not detected within ${DEVICE_WAIT_TIMEOUT} seconds"
-        echo "   Make sure to double-tap the reset button to enter bootloader mode"
-        return 1
-    fi
-    
-    # Give the device a moment to settle
-    sleep 1
-    
-    if [ ! -e "$DEVICE" ]; then
-        echo "✗ Error: Device disappeared after detection"
-        return 1
-    fi
-    
-    echo "✓ Device detected!"
-    return 0
+    echo "✗ Timeout: Device not detected within ${DEVICE_WAIT_TIMEOUT} seconds"
+    echo "   Make sure to double-tap the reset button to enter bootloader mode"
+    return 1
 }
 
 # Wait for device to be removed
