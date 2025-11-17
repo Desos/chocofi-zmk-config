@@ -58,6 +58,29 @@
             display-name = "Sticky-Mod-HT";
         };
 
+        // Hold for modifier, tap for HYPER/MEH combo
+        // Usage: &ht_mod_hyper LSHIFT HYPER(N)
+        // Hold = LSHIFT modifier, Tap = Super+Alt+Ctrl+Shift+N
+        hm_thk: hold_mod_tap_hyper_key {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "hold-preferred";
+            tapping-term-ms = <150>;
+            quick-tap-ms = <125>;
+            bindings = <&kp>, <&kp>;
+            display-name = "Mod-Hyper-HT";
+        };
+
+        hm_tmk: hold_mod_tap_meh_key {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "hold-preferred";
+            tapping-term-ms = <150>;
+            quick-tap-ms = <125>;
+            bindings = <&kp>, <&kp>;
+            display-name = "Mod-Meh-HT";
+        };
+
         // Mod-morph behaviors for RSFT key overrides
         // RSFT + number keys -> F-keys
         mm_1: mm_1 {
@@ -260,10 +283,10 @@
         left_nav_layer {
             label = "L_NAV";
             bindings = <
-                &kp HYPER(A)  &kp LEFT     &kp UP       &kp RIGHT    &kp LC(V)        &trans       &trans       &trans       &trans       &trans
-                &kp HYPER_M   &kp BSPC     &kp MEH(E)   &kp DEL      &kp LC(C)        &trans       &trans       &trans       &trans       &trans
-                &kp PSCRN     &kp LC(Z)    &kp DOWN     &kp LC(Y)    &kp LC(X)        &trans       &trans       &trans       &trans       &trans
-                             &trans       &trans       &trans                         &trans       &kp HYPER(TAB)  &kp HYPER(F13)
+                &kp HYPER(A)        &kp LEFT     &kp UP       &kp RIGHT    &kp LC(V)        &trans       &trans       &trans       &trans       &trans
+                &hm_thk HYPER_M A   &kp BSPC     &kp MEH(S)   &kp DEL      &kp LC(C)        &trans       &trans       &trans       &trans       &trans
+                &kp PSCRN           &kp LC(Z)    &kp DOWN     &kp LC(Y)    &kp LC(X)        &trans       &trans       &trans       &trans       &trans
+                             &trans       &trans       &trans                         &trans       &lt_hp 6 HYPER(TAB)  &lt_hp 3 HYPER(F13)
             >;
         };
 
@@ -272,7 +295,7 @@
             label = "R_NAV";
             bindings = <
                 &trans       &trans       &trans       &trans       &trans           &kp C_VOL_UP &kp HOME     &kp PG_UP    &kp END      &kp HYPER(W)
-                &trans       &trans       &trans       &trans       &trans           &kp C_VOL_DN &kp MEH(C)   &kp MEH(E)   &kp MEH(I)   &kp HYPER_M
+                &trans       &trans       &trans       &trans       &trans           &kp C_VOL_DN &kp MEH(C)   &kp MEH(E)   &kp MEH(I)   &hm_thk HYPER_M O
                 &trans       &trans       &trans       &trans       &trans           &kp C_PP     &kp MEH(H)   &kp PG_DN    &kp MEH(G)   &kp HYPER(J)
                              &kp HYPER(ESC)       &kp HYPER(RET) &trans                        &trans       &trans       &trans
             >;
@@ -294,9 +317,9 @@
         left_mods_layer {
             label = "L_MODS";
             bindings = <
-                &trans             &trans             &trans               &trans              &trans           &trans       &trans       &trans       &trans       &trans
-                &sm_ht LGUI LGUI   &sm_ht LALT LALT   &sm_ht LSHIFT LSHIFT &sm_ht LCTRL LCTRL  &trans           &trans       &trans       &trans       &trans       &trans
-                &trans             &trans             &trans               &trans              &trans           &trans       &trans       &trans       &trans       &trans
+                &kp MEH(Q)     &kp MEH(K)     &kp MEH(F)       &kp MEH(P)      &kp MEH(B)      &trans &trans &trans &trans &trans
+                &hm_tmk LGUI A &hm_tmk LALT R &hm_tmk LSHIFT S &hm_tmk LCTRL T &kp MEH(SPACE)  &trans &trans &trans &trans &trans
+                &kp MEH(Z)     &kp MEH(X)     &kp MEH(C)       &kp MEH(D)      &kp MEH(V)      &trans &trans &trans &trans &trans
                              &trans       &trans       &trans                        &trans       &trans       &trans
             >;
         };
@@ -305,10 +328,10 @@
         right_mods_layer {
             label = "R_MODS";
             bindings = <
-                &trans       &trans       &trans       &trans       &trans           &trans       &trans              &trans               &trans             &trans
-                &trans       &trans       &trans       &trans       &trans           &trans       &sm_ht LCTRL LCTRL  &sm_ht LSHIFT LSHIFT &sm_ht LALT LALT   &sm_ht LGUI LGUI
-                &trans       &trans       &trans       &trans       &trans           &trans       &trans              &trans               &trans             &trans
-                             &trans       &trans       &trans                        &trans       &trans       &trans
+                &trans       &trans       &trans       &trans       &trans           &kp MEH(SEMI)      &kp MEH(L)         &kp MEH(U)         &kp MEH(Y)        &kp MEH(W)
+                &trans       &trans       &trans       &trans       &trans           &kp COMMA          &hm_tmk LCTRL N    &hm_tmk LSHIFT E   &hm_tmk LALT I    &hm_tmk LGUI O
+                &trans       &trans       &trans       &trans       &trans           &kp MEH(SQT)       &kp MEH(H)         &kp MEH(M)         &kp MEH(G)        &kp MEH(J)
+                             &trans       &trans       &trans                        &trans        &trans          &trans
             >;
         };
 
