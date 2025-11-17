@@ -23,8 +23,8 @@
 #define MEH(key) LA(LC(LS(key)))
 
 // Standalone modifier holds (for use without a key)
-#define HYPER_MODS LG(LA(LC(LSHIFT)))
-#define MEH_MODS LA(LC(LSHIFT))
+#define HYPER_M LG(LA(LC(LSHIFT)))
+#define MEH_M LA(LC(LSHIFT))
 
 / {
     chosen {
@@ -140,6 +140,7 @@
             mods = <(MOD_RSFT)>;
         };
 
+
         // RSFT + symbols -> alternative symbols
         mm_slsh: mm_slsh {
             compatible = "zmk,behavior-mod-morph";
@@ -232,7 +233,7 @@
                 &kp Q        &kp K        &kp F        &kp P        &kp B            &kp SEMI     &kp L        &kp U        &kp Y        &kp W
                 &kp A        &kp R        &kp S        &kp T        &kp SPACE        &mm_comm     &kp N        &kp E        &kp I        &kp O
                 &kp Z        &kp X        &kp C        &kp D        &kp V            &kp SQT      &kp H        &kp M        &kp G        &kp J
-                             &lt_hp 2 ESC    &lt_hp 5 RET    &sl 4                         &sk RSHIFT   &lt_hp 6 TAB    &lt_hp 3 F12
+                             &lt_hp 2 ESC    &lt_hp 5 RET    &sl 4                         &sk RSHIFT   &lt_hp 6 TAB    &lt_hp 3 F13
             >;
         };
 
@@ -251,10 +252,10 @@
         left_nav_layer {
             label = "L_NAV";
             bindings = <
-                &kp LCTRL    &kp LEFT     &kp UP       &kp RIGHT    &kp LC(V)        &trans       &trans       &trans       &trans       &trans
-                &kp LGUI     &kp BSPC     &kp LSHIFT   &kp DEL      &kp LC(C)        &trans       &trans       &trans       &trans       &trans
-                &kp HYPER_MODS  &kp LC(Z)  &kp DOWN  &kp LC(Y)  &kp LC(X)           &trans       &trans       &trans       &trans       &trans
-                             &trans       &trans       &trans                        &trans       &trans       &trans
+                &kp HYPER(A)  &kp LEFT     &kp UP       &kp RIGHT    &kp LC(V)        &trans       &trans       &trans       &trans       &trans
+                &kp HYPER_M   &kp BSPC     &kp HYPER(E) &kp DEL      &kp LC(C)        &trans       &trans       &trans       &trans       &trans
+                &kp PSCRN     &kp LC(Z)    &kp DOWN     &kp LC(Y)    &kp LC(X)        &trans       &trans       &trans       &trans       &trans
+                             &trans       &trans       &trans                         &trans       &kp HYPER(TAB)  &kp HYPER(F13)
             >;
         };
 
@@ -262,10 +263,10 @@
         right_nav_layer {
             label = "R_NAV";
             bindings = <
-                &trans       &trans       &trans       &trans       &trans           &kp C_VOL_UP &kp HOME     &kp PG_UP    &kp END      &tog 1
-                &trans       &trans       &trans       &trans       &trans           &kp C_VOL_DN &kp C_PREV   &mt LSHIFT K_APP  &kp C_NEXT  &kp C_MUTE
-                &trans       &trans       &trans       &trans       &trans           &kp C_PP     &kp BSPC     &kp PG_DN    &kp DEL      &kp PSCRN
-                             &trans       &trans       &trans                        &trans       &trans       &trans
+                &trans       &trans       &trans       &trans       &trans           &kp C_VOL_UP &kp HOME     &kp PG_UP    &kp END      &kp HYPER(W)
+                &trans       &trans       &trans       &trans       &trans           &kp C_VOL_DN &kp HYPER(C) &kp HYPER(E) &kp HYPER(I) &kp HYPER(O)
+                &trans       &trans       &trans       &trans       &trans           &kp C_PP     &kp HYPER(H) &kp PG_DN    &kp HYPER(G) &kp HYPER(J)
+                             &kp HYPER(ESC)       &kp HYPER(RET) &trans                        &trans       &trans       &trans
             >;
         };
 
@@ -278,6 +279,7 @@
                 &kp PLUS     &mm_7        &mm_8        &mm_9        &mm_0            &mm_eq       &kp AMPS     &kp TILDE    &kp UNDER    &kp PRCNT
                              &trans       &trans       &trans                        &trans       &kp LS(TAB)  &kp LS(F12)
             >;
+
         };
 
         // Layer 5: LEFT_MODS
