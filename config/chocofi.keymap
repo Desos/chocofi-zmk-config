@@ -146,7 +146,7 @@
             compatible = "zmk,behavior-mod-morph";
             label = "MM_SLSH";
             #binding-cells = <0>;
-            bindings = <&kp SLASH>, <&kp QMARK>;
+            bindings = <&kp SLASH>, <&kp BSLH>;
             mods = <(MOD_RSFT)>;
         };
 
@@ -207,19 +207,27 @@
         };
     };
 
+
+
     conditional_layers {
         compatible = "zmk,conditional-layers";
         
         // Activate mouse layer when both LEFT_NAV and RIGHT_NAV are active
         mouse_layer {
-            if-layers = <2 3>;  // LEFT_NAV + RIGHT_NAV
+            if-layers = <5 6>;  // LEFT_NAV + RIGHT_NAV
             then-layer = <7>;   // MOUSE layer
         };
         
+
         // Activate system/BT layer when both LEFT_NAV and LEFT_MODS are active
-        system_layer {
+        left_system_layer {
             if-layers = <2 5>;  // LEFT_NAV + LEFT_MODS
-            then-layer = <8>;   // SYSTEM layer
+            then-layer = <8>;   // LEFT_SYS layer
+        };
+
+        right_system_layer {
+            if-layers = <3 6>;  // RIGHT_NAV + RIGHT_MODS
+            then-layer = <9>;   // RIGHT_SYS Layer
         };
     };
 
@@ -253,7 +261,7 @@
             label = "L_NAV";
             bindings = <
                 &kp HYPER(A)  &kp LEFT     &kp UP       &kp RIGHT    &kp LC(V)        &trans       &trans       &trans       &trans       &trans
-                &kp HYPER_M   &kp BSPC     &kp HYPER(E) &kp DEL      &kp LC(C)        &trans       &trans       &trans       &trans       &trans
+                &kp HYPER_M   &kp BSPC     &kp MEH(E)   &kp DEL      &kp LC(C)        &trans       &trans       &trans       &trans       &trans
                 &kp PSCRN     &kp LC(Z)    &kp DOWN     &kp LC(Y)    &kp LC(X)        &trans       &trans       &trans       &trans       &trans
                              &trans       &trans       &trans                         &trans       &kp HYPER(TAB)  &kp HYPER(F13)
             >;
@@ -264,8 +272,8 @@
             label = "R_NAV";
             bindings = <
                 &trans       &trans       &trans       &trans       &trans           &kp C_VOL_UP &kp HOME     &kp PG_UP    &kp END      &kp HYPER(W)
-                &trans       &trans       &trans       &trans       &trans           &kp C_VOL_DN &kp HYPER(C) &kp HYPER(E) &kp HYPER(I) &kp HYPER(O)
-                &trans       &trans       &trans       &trans       &trans           &kp C_PP     &kp HYPER(H) &kp PG_DN    &kp HYPER(G) &kp HYPER(J)
+                &trans       &trans       &trans       &trans       &trans           &kp C_VOL_DN &kp MEH(C)   &kp MEH(E)   &kp MEH(I)   &kp HYPER_M
+                &trans       &trans       &trans       &trans       &trans           &kp C_PP     &kp MEH(H)   &kp PG_DN    &kp MEH(G)   &kp HYPER(J)
                              &kp HYPER(ESC)       &kp HYPER(RET) &trans                        &trans       &trans       &trans
             >;
         };
@@ -286,9 +294,9 @@
         left_mods_layer {
             label = "L_MODS";
             bindings = <
-                &trans       &trans       &trans       &trans       &trans           &trans       &trans       &trans       &trans       &tog 1
+                &trans             &trans             &trans               &trans              &trans           &trans       &trans       &trans       &trans       &trans
                 &sm_ht LGUI LGUI   &sm_ht LALT LALT   &sm_ht LSHIFT LSHIFT &sm_ht LCTRL LCTRL  &trans           &trans       &trans       &trans       &trans       &trans
-                &trans       &trans       &trans       &trans       &trans           &trans       &trans       &trans       &trans       &trans
+                &trans             &trans             &trans               &trans              &trans           &trans       &trans       &trans       &trans       &trans
                              &trans       &trans       &trans                        &trans       &trans       &trans
             >;
         };
@@ -297,9 +305,9 @@
         right_mods_layer {
             label = "R_MODS";
             bindings = <
-                &trans       &trans       &trans       &trans       &trans           &trans       &trans       &trans       &trans       &tog 1
+                &trans       &trans       &trans       &trans       &trans           &trans       &trans              &trans               &trans             &trans
                 &trans       &trans       &trans       &trans       &trans           &trans       &sm_ht LCTRL LCTRL  &sm_ht LSHIFT LSHIFT &sm_ht LALT LALT   &sm_ht LGUI LGUI
-                &trans       &trans       &trans       &trans       &trans           &trans       &trans       &trans       &trans       &trans
+                &trans       &trans       &trans       &trans       &trans           &trans       &trans              &trans               &trans             &trans
                              &trans       &trans       &trans                        &trans       &trans       &trans
             >;
         };
@@ -308,22 +316,34 @@
         up_nav_layer {
             label = "MOUSE";
             bindings = <
-                &trans       &mmv MOVE_LEFT  &mmv MOVE_UP    &mmv MOVE_RIGHT  &trans           &trans       &mkp LCLK    &mkp MCLK    &mkp RCLK    &trans
-                &kp LGUI     &kp LALT        &kp LSHIFT      &kp LCTRL        &trans           &trans       &kp LCTRL    &kp LSHIFT   &kp LALT     &kp LGUI
-                &trans       &trans          &mmv MOVE_DOWN  &trans           &trans           &trans       &trans       &trans       &trans       &trans
+               &trans       &mmv MOVE_LEFT  &mmv MOVE_UP    &mmv MOVE_RIGHT  &trans           &trans       &msc SCRL_LEFT     &msc SCRL_UP            &msc SCRL_RIGHT       &trans
+               &trans       &trans          &trans          &trans           &trans           &trans       &mkp LCLK          &mkp MCLK               &mkp RCLK             &trans
+               &trans       &trans          &mmv MOVE_DOWN  &trans           &trans           &trans       &trans             &msc SCRL_DOWN          &trans                &trans
                              &trans       &trans       &trans                        &trans       &trans       &trans
             >;
         };
 
-        // Layer 8: SYSTEM/BT (Bluetooth and system controls - left hand only)
-        system_layer {
-            label = "SYSTEM";
+        // Layer 8: LEFT_SYS/BT (Bluetooth and system controls - left hand only)
+        left_system_layer {
+            label = "LEFT_SYS";
             bindings = <
                 &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4     &trans       &trans       &trans       &trans       &trans
                 &sys_reset   &bootloader  &studio_unlock &trans     &trans           &trans       &trans       &trans       &trans       &trans
-                &trans       &trans       &trans       &trans       &bt BT_CLR       &trans       &trans       &trans       &trans       &trans
+                &tog 1       &trans       &trans       &trans       &bt BT_CLR       &trans       &trans       &trans       &trans       &trans
                              &trans       &trans       &trans                        &trans       &trans       &trans
             >;
         };
+
+        // Layer 9: RIGHT_SYS/BT (Bluetooth and system controls - right hand only)
+        right_system_layer {
+            label = "RIGHT_SYS";
+            bindings = <
+                &trans       &trans       &trans       &trans       &trans           &bt BT_SEL 4     &bt BT_SEL 3 &bt BT_SEL 2   &bt BT_SEL 1    &bt BT_SEL 0
+                &trans       &trans       &trans       &trans       &trans           &trans           &trans       &studio_unlock &bootloader     &sys_reset
+                &trans       &trans       &trans       &trans       &trans           &bt BT_CLR       &trans       &trans         &trans          &tog 1
+                             &trans       &trans       &trans                        &trans       &trans       &trans
+            >;
+        };
+    
     };
 };
