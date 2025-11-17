@@ -186,29 +186,23 @@ flash_side() {
     fi
     echo "done"
     
-    # Verify copy succeeded
-    local source_size dest_size
-    source_size=$(stat -c%s "$firmware_path" 2>/dev/null || echo "0")
-    dest_size=$(stat -c%s "$mount_point/firmware.uf2" 2>/dev/null || echo "0")
-    
-    if [ "$source_size" != "$dest_size" ] || [ "$source_size" = "0" ]; then
-        echo "✗ Error: Firmware copy verification failed"
-        echo "   Source size: $source_size bytes"
-        echo "   Dest size: $dest_size bytes"
-        udisksctl unmount --block-device "$DEVICE" --no-user-interaction &> /dev/null
-        return 1
-    fi
-    
-    echo "✓ Verified copy successful ($source_size bytes)"
-    
     # Sync to ensure write completes
+    echo "✓ Syncing filesystem..."
     sync
     
-    # Unmount
-    if ! udisksctl unmount --block-device "$DEVICE" --no-user-interaction &> /dev/null; then
-        echo "⚠ Warning: Failed to unmount cleanly (device may have auto-ejected)"
+    # Unmount (blocking - wait for completion)
+    echo -n "✓ Unmounting... "
+    if udisksctl unmount --block-device "$DEVICE" --no-user-interaction 2>&1 >/dev/null; then
+        echo "done"
     else
-        echo "✓ Unmounted"
+        # Device may have auto-ejected during flash - this is normal for UF2 bootloaders
+        if [ ! -e "$DEVICE" ]; then
+            echo "done (device auto-ejected)"
+        else
+            echo "failed"
+            echo "✗ Error: Failed to unmount device"
+            return 1
+        fi
     fi
     
     echo ""
