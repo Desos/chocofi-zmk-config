@@ -11,6 +11,21 @@
 #include <dt-bindings/zmk/mouse.h>
 #include <dt-bindings/zmk/pointing.h>
 
+/*
+ * Modifier Combination Macros
+ * These provide shorthand for common modifier combinations
+ */
+
+// HYPER = Super + Alt + Ctrl + Shift (all modifiers)
+#define HYPER(key) LG(LA(LC(LS(key))))
+
+// MEH = Alt + Ctrl + Shift (all modifiers except Super)
+#define MEH(key) LA(LC(LS(key)))
+
+// Standalone modifier holds (for use without a key)
+#define HYPER_MODS LG(LA(LC(LSHIFT)))
+#define MEH_MODS LA(LC(LSHIFT))
+
 / {
     chosen {
         zmk,physical-layout = &foostan_corne_5col_layout;
@@ -238,7 +253,7 @@
             bindings = <
                 &kp LCTRL    &kp LEFT     &kp UP       &kp RIGHT    &kp LC(V)        &trans       &trans       &trans       &trans       &trans
                 &kp LGUI     &kp BSPC     &kp LSHIFT   &kp DEL      &kp LC(C)        &trans       &trans       &trans       &trans       &trans
-                &kp LG(LA(LC(LSHIFT)))  &kp LC(Z)  &kp DOWN  &kp LC(Y)  &kp LC(X)     &trans       &trans       &trans       &trans       &trans
+                &kp HYPER_MODS  &kp LC(Z)  &kp DOWN  &kp LC(Y)  &kp LC(X)           &trans       &trans       &trans       &trans       &trans
                              &trans       &trans       &trans                        &trans       &trans       &trans
             >;
         };
